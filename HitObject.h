@@ -8,7 +8,8 @@
 class HitObject
 {
 public:
-	HitObject(unsigned x, unsigned y, unsigned startTime, unsigned endTime, unsigned type) : x(x), y(y), startTime(startTime), endTime(endTime), type(static_cast<types>(type)) {}
+	HitObject(unsigned x, unsigned y, unsigned startTime, unsigned endTime, unsigned type) 
+		: x(x), y(y), startTime(startTime), endTime(endTime), type(static_cast<types>(type)) {}
 	~HitObject() {}
 
 	unsigned getX() const {
