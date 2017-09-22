@@ -1,6 +1,7 @@
 #include "Slider.h"
 
-Slider::Slider(unsigned x, unsigned y, unsigned startTime, unsigned endTime, unsigned type) : HitObject(x, y, startTime, endTime, type) {}
+Slider::Slider(unsigned x, unsigned y, unsigned startTime, unsigned endTime, unsigned type, unsigned repeat, double pixelLength)
+	: HitObject(x, y, startTime, endTime, type), repeat(repeat), pixelLength(pixelLength) {}
 
 
 Slider::~Slider() {
