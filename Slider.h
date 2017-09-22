@@ -17,5 +17,7 @@ public:
 
 private:
 	std::vector<vec2<unsigned>> controlPoints;
+	unsigned repeat;
+	double pixelLength;
 };
 
