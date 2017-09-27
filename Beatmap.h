@@ -23,7 +23,7 @@ private:
 
 	std::vector<TimingPoint> timingPoints;
 	// Pointer of base type to avoid object slicing
-	std::vector<std::unique_ptr<HitObject>> hitObjects;
+	std::vector<std::shared_ptr<HitObject>> hitObjects;
 
 public:
 	Beatmap(std::string filePath);
@@ -32,4 +32,9 @@ public:
 	bool readSongFile();
 
 	void printBeatmap() const;
+
+	// Helpers
+	void parseHitObject(std::wstring line);
+	std::vector<std::wstring> splitLine(std::wstring line);
+	std::wstring getLineValue(std::wstring line); // For lines with only one piece of data
 };

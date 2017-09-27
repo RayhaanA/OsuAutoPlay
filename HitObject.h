@@ -38,6 +38,7 @@ public:
 
 	// Different HitObject types defined by .osu file format
 	enum types {
+		EMPTY = 0,
 		CIRCLE = 1,
 		SLIDER = 2,
 		SPINNER = 8

@@ -1,6 +1,6 @@
 #include "HitCircle.h"
 
-HitCircle::HitCircle(unsigned x, unsigned y, unsigned startTime,  unsigned type, unsigned endTime = 0)
+HitCircle::HitCircle(unsigned x, unsigned y, unsigned startTime,  unsigned type, unsigned endTime)
   : HitObject(x, y, startTime, endTime, type) {}
 
 
