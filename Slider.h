@@ -7,7 +7,7 @@ class Slider :
 	public HitObject
 {
 public:
-	Slider(unsigned x, unsigned y, unsigned startTime, unsigned endTime, unsigned type
+	Slider(unsigned x, unsigned y, unsigned startTime, unsigned endTime, unsigned type,
 		unsigned repeat, double pixelLength);
 	~Slider();
 

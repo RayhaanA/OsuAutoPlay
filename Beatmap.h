@@ -29,7 +29,7 @@ public:
 	Beatmap(std::string filePath);
 	~Beatmap();
 
-	bool readSongFile(std::string filePath);
+	bool readSongFile();
 
-	void printBeatmap const ();
+	void printBeatmap() const;
 };
