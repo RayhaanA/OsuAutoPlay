@@ -1,5 +1,7 @@
 #pragma once
 #include "HitObject.h"
+#include <iostream>
+
 class Spinner :
 	public HitObject
 {
@@ -8,5 +10,7 @@ public:
 	~Spinner();
 
 	void hit();
+
+	void printInfo() const;
 };
 

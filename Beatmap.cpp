@@ -36,10 +36,6 @@ bool Beatmap::readSongFile() {
 	// file format starts with metadata, then defines timing points, 
 	// and finally hit objects 
 
-	// (TODO: Could create function to split line by delimiter
-	//  instead and access required positions by known index from
-	//  osu! documentation)
-
 	while (std::getline(beatmapFile, line)) {
 		// Find metadata
 		if (!foundMetaData) {
@@ -52,7 +48,7 @@ bool Beatmap::readSongFile() {
 			}
 			continue;
 		}
-
+		
 		// Find OD
 		if (!foundDiffculty) {
 			if (line.find(L"OverallDifficulty") != std::string::npos) {
@@ -69,12 +65,9 @@ bool Beatmap::readSongFile() {
 		if (!foundTimingPoints) {
 			if (line.find(L"TimingPoints") != std::string::npos) {
 				while (std::getline(beatmapFile, line) && !line.empty()) {
-					unsigned pos = line.find(L",");
-					unsigned offset = std::stoul((line.substr(0, pos)));
-					line.erase(0, pos);
-
-					pos = line.find(L",");
-					double msPerBeat = std::stod(line.substr(0, pos));
+					std::vector<std::wstring> timingPointInfo = splitLine(line, ',');
+					unsigned offset = std::stoul(timingPointInfo.at(0));
+					double msPerBeat = std::stod(timingPointInfo.at(1));
 
 					timingPoints.push_back(TimingPoint(offset, msPerBeat));
 				}
@@ -87,11 +80,12 @@ bool Beatmap::readSongFile() {
 		if (!foundHitObjects) {
 			if (line.find(L"HitObjects") != std::string::npos) {
 				while (std::getline(beatmapFile, line) && !line.empty()) {
-					hitObjects.push_back(parseHitObject(line));
+					parseHitObject(line);
 				}
 			}
 			foundHitObjects = true;
 		}
+		// Hit objects are last section of .osu file
 	}
 
 	auto end = std::chrono::high_resolution_clock::now();
@@ -105,45 +99,69 @@ bool Beatmap::readSongFile() {
 }
 
 void Beatmap::parseHitObject(std::wstring line) {
-	unsigned x;
-	unsigned y; 
-	unsigned startTime;
 	unsigned endTime;
 	HitObject::types type = HitObject::types::EMPTY;
 
-	std::vector<std::wstring> lineComponents = splitLine(line);
-	x = std::stoul(lineComponents.at(0));
-	y = std::stoul(lineComponents.at(1));
-	startTime = std::stoul(lineComponents.at(2));
+	std::vector<std::wstring> lineComponents = splitLine(line, ',');
+	unsigned x = std::stoul(lineComponents.at(0));
+	unsigned y = std::stoul(lineComponents.at(1));
+	unsigned startTime = std::stoul(lineComponents.at(2));
 	type = static_cast<HitObject::types>(std::stoi(lineComponents.at(3)));
 
-	if (type == HitObject::types::SLIDER) {
+	if (type == HitObject::types::SPINNER) {
 		endTime = std::stoul(lineComponents.at(5));
-		std::shared_ptr<Spinner> s(new Spinner(x, y, startTime, endTime, type));
-		hitObjects.push_back(s);
+		// std::unique_ptr<Spinner>(new Spinner(x, y, startTime, endTime, type));
+		hitObjects.push_back(std::unique_ptr<Spinner>(new Spinner(x, y, startTime, endTime, type)));
 	}
 	else if (type == HitObject::types::CIRCLE) {
-		endTime = startTime + 2;
-		std::shared_ptr<HitCircle> c(new HitCircle(x, y, startTime, endTime, type));
-		hitObjects.push_back(c);
+		endTime = startTime + 2; // Guess
+		hitObjects.push_back(std::unique_ptr<HitCircle>(new HitCircle(x, y, startTime, endTime, type)));
 	}
 	else if (type == HitObject::types::SLIDER) {
+		wchar_t sliderType = lineComponents.at(5)[0];
+		double pixelLength = std::stod(lineComponents.at(7));
+		unsigned repeat = std::stoul(lineComponents.at(6));
 
-	}
+		TimingPoint activeTimingPoint = TimingPoint::getActiveTimingPoint(startTime, timingPoints);
 
-	
+		// Calculation for roughly how long a slider will last by adding the number of repeats
+		// times the pixel length of the slider divided by the pixels per beat value to 
+		// the start time (100 * vel is the effective velocity for the timing point)
+		unsigned endTime = static_cast<unsigned>(std::ceil(startTime + repeat * pixelLength 
+											/ (100 * activeTimingPoint.getVelocity() * sliderMultiplier)));
+		std::vector<vec2<unsigned>> controlPoints;
+		std::vector<std::wstring> sControlPoints = splitLine(lineComponents.at(5), '|');
+		for (auto & i : sControlPoints) {
+			unsigned pos = i.find(':');
+			vec2<unsigned> point = { std::stoul(i.substr(0, pos)), std::stoul(i.substr(pos + 1, i.length())) };
+			controlPoints.push_back(point);
+		}
+
+		hitObjects.push_back(std::unique_ptr<Slider>(new Slider(x, y, startTime, endTime, type, sliderType, controlPoints)));
+	}	
 }
 
 std::wstring Beatmap::getLineValue(std::wstring line) {
-	return (line.substr(line.find(L":") + 1));
+	return (line.substr(line.find(',') + 1));
 }
 
-std::vector<std::wstring> Beatmap::splitLine(std::wstring line) {
+std::vector<std::wstring> Beatmap::splitLine(std::wstring line, const wchar_t & delimiter) {
 	std::vector<std::wstring> lineComponents;
-	while (line.find(L",") != std::string::npos) {
-		unsigned pos = line.find(L",");
+	while (line.find(delimiter) != std::string::npos) {
+		unsigned pos = line.find(delimiter);
 		lineComponents.push_back(line.substr(0, pos));
 		line.erase(0, pos + 1);
 	}
 	return lineComponents;
 }
+
+void Beatmap::printBeatmap() const {
+	std::cout << "Song file path: " << songFilePath << std::endl;
+	std::wcout << L"Song Title: " << songTitle << std::endl;
+	std::wcout << L"Song Artist: " << songArtist << std::endl;
+	std::cout << "Overall Song Difficulty: " << overallDifficulty << std::endl;
+	std::cout << "Slider Multipler: " << sliderMultiplier << "\n" << std::endl;
+
+}
+
+

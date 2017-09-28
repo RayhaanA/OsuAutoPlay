@@ -78,7 +78,7 @@ public:
 	}
 
 	friend std::ostream& operator<<(std::ostream& os, const vec2<T>& vec) {
-		os << "(" << vec.x << ", " << vec.y << ")" << std::endl;
+		os << "(" << vec.x << ", " << vec.y << ")";
 		return os;
 	}
 
