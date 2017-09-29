@@ -8,14 +8,15 @@ class Slider :
 {
 public:
 	Slider(unsigned x, unsigned y, unsigned startTime, unsigned endTime, unsigned type,
-		unsigned repeat, double pixelLength);
+		 wchar_t sliderType, std::vector<vec2<unsigned>> controlPoints);
 	~Slider();
-
-	void addControlPoint(vec2<unsigned> point);
 
 	void hit();
 
+	void printInfo() const;
+
 private:
+	wchar_t sliderType;
 	std::vector<vec2<unsigned>> controlPoints;
 	unsigned repeat;
 	double pixelLength;

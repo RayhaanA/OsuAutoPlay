@@ -34,6 +34,8 @@ public:
 
 	// Method for how the HitObject will be handled 
 	// differs for all HitObject types
+	// This method is for performing mouse movement and
+	// clicking the object
 	virtual void hit() = 0;
 
 	// Different HitObject types defined by .osu file format
@@ -43,6 +45,8 @@ public:
 		SLIDER = 2,
 		SPINNER = 8
 	};
+
+	virtual void printInfo() const = 0;
 
 private:
 	unsigned x;

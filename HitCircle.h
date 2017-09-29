@@ -9,4 +9,7 @@ public:
 	~HitCircle();
 
 	void hit();
+
+	void printInfo() const;
+
 };
