@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 #include <vector>
+#include <iostream>
 
 class TimingPoint
 {
@@ -61,7 +62,7 @@ public:
 	}
 
 	friend std::ostream& operator<<(std::ostream& os, const TimingPoint & point) {
-		os << "(" << point.offset << ", " << point.msPerBeat << << ", " << point.inherited
+		os << "(" << point.offset << ", " << point.msPerBeat << ", " << point.inherited
 			<< ", " << point.velocity << ")";
 		return os;
 	}

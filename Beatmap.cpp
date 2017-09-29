@@ -37,6 +37,9 @@ bool Beatmap::readSongFile() {
 	// and finally hit objects 
 
 	while (std::getline(beatmapFile, line)) {
+
+		std::wcout << line << std::endl;
+
 		// Find metadata
 		if (!foundMetaData) {
 			if (line.find(L"TitleUnicode:") != std::string::npos) {
