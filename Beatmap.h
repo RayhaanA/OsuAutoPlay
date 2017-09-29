@@ -8,7 +8,7 @@
 class Beatmap
 {
 private:
-	std::string songFilePath;
+	std::wstring songFilePath;
 
 	// Needed for input timing as period for
 	// a "perfectly" timed hit decreases as 
@@ -26,7 +26,7 @@ private:
 	std::vector<std::unique_ptr<HitObject>> hitObjects;
 
 public:
-	Beatmap(std::string filePath);
+	Beatmap(std::wstring filePath);
 	~Beatmap();
 
 	bool readSongFile();

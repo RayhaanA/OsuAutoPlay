@@ -1,7 +1,7 @@
 #include "HitCircle.h"
 #include <iostream>
 
-HitCircle::HitCircle(unsigned x, unsigned y, unsigned startTime,  unsigned type, unsigned endTime)
+HitCircle::HitCircle(unsigned x, unsigned y, unsigned startTime, unsigned endTime, unsigned type)
   : HitObject(x, y, startTime, endTime, type) {}
 
 
@@ -14,6 +14,6 @@ void HitCircle::hit() {
 }
 
 void HitCircle::printInfo() const {
-	std::cout << "(" << getX() << ", " << getY() << ", " << getStartTime()
+	std::wcout << "(" << getX() << ", " << getY() << ", " << getStartTime()
 		<< ", " << getEndTime() << ", " << getType() << ")";
 }

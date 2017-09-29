@@ -16,10 +16,9 @@ void Slider::hit() {
 }
 
 void Slider::printInfo() const {
-	std::cout << "(" << getX() << ", " << getY() << ", " << getStartTime()
-		<< ", " << getEndTime() << ", " << getType() << ")";
-	for (auto & i : controlPoints) {
-		std::cout << i << " ";
+	std::wcout << "(" << getX() << ", " << getY() << ", " << getStartTime()
+		<< ", " << getEndTime() << ", " << getType() << ", " << sliderType << ")" << " # ";
+	for (const auto & i : controlPoints) {
+		std::wcout << i << " | ";
 	}
-	std::cout << std::endl;
 }

@@ -61,7 +61,7 @@ public:
 		return points.at(0);
 	}
 
-	friend std::ostream& operator<<(std::ostream& os, const TimingPoint & point) {
+	friend std::wostream& operator<<(std::wostream& os, const TimingPoint & point) {
 		os << "(" << point.offset << ", " << point.msPerBeat << ", " << point.inherited
 			<< ", " << point.velocity << ")";
 		return os;

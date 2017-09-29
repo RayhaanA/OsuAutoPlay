@@ -77,7 +77,7 @@ public:
 		return lhs;
 	}
 
-	friend std::ostream& operator<<(std::ostream& os, const vec2<T>& vec) {
+	friend std::wostream& operator<<(std::wostream& os, const vec2<T>& vec) {
 		os << "(" << vec.x << ", " << vec.y << ")";
 		return os;
 	}
