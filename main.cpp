@@ -1,8 +1,7 @@
 #include "vec2.h"
 #include "Beatmap.h"
 #include "TimingPoint.h"
-#include <vector>
-#include <memory>
+#include "Input.h"
 
 // Trying out unicode functionality 
 #include <io.h>
@@ -17,6 +16,17 @@ int wmain() {
 		std::wcerr << L"Couldn't parse beatmap file!" << std::endl;
 	}
 	b.printBeatmap();
+	Input a;
+	a.sendKeyInput('a', true);
+	a.sendKeyInput('b', true);
+	a.sendKeyInput('c', true);
+	a.sendKeyInput('d', true);
+	a.sendKeyInput('e', true);
+	a.sendKeyInput('a', true);
+	for (unsigned i = 0; i < b.hitObjects.size(); i++) {
+		a.moveMouseInstant(vec2<unsigned>{b.hitObjects.at(i)->getX(), b.hitObjects.at(i)->getY()});
+		Sleep(20);
+	}
 	std::cin.get();
 	return 0;
 }

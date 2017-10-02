@@ -21,10 +21,6 @@ private:
 	std::wstring songArtist;
 
 
-	std::vector<TimingPoint> timingPoints;
-	// Pointer of base type to avoid object slicing
-	std::vector<std::unique_ptr<HitObject>> hitObjects;
-
 public:
 	Beatmap(std::wstring filePath);
 	~Beatmap();
@@ -38,4 +34,8 @@ public:
 	std::vector<std::wstring> splitLine(std::wstring line, const wchar_t & delimiter);
 	std::wstring getLineValue(std::wstring line); // For lines with only one piece of data
 												  // ie. single value after colon
+
+	std::vector<TimingPoint> timingPoints;
+	// Pointer of base type to avoid object slicing
+	std::vector<std::unique_ptr<HitObject>> hitObjects;
 };
