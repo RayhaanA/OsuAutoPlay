@@ -1,11 +1,8 @@
 #pragma once
 #include <Windows.h>
 #include <iostream>
-class Input
-{
-public:
-	Input() {}
-	~Input() {}
+
+namespace Input {
 
 	void sendKeyInput(char key, bool pressed) {
 		INPUT keyboardInput = {0};
@@ -27,6 +24,5 @@ public:
 		mouseInput.mi.time = 0; 
 		SendInput(1, &mouseInput, sizeof(mouseInput));
 	}
-
-};
+}
 

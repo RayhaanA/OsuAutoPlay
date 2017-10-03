@@ -16,16 +16,15 @@ int wmain() {
 		std::wcerr << L"Couldn't parse beatmap file!" << std::endl;
 	}
 	b.printBeatmap();
-	Input a;
-	a.sendKeyInput('a', true);
-	a.sendKeyInput('b', true);
-	a.sendKeyInput('c', true);
-	a.sendKeyInput('d', true);
-	a.sendKeyInput('e', true);
-	a.sendKeyInput('a', true);
+	Input::sendKeyInput('a', true);
+	Input::sendKeyInput('b', true);
+	Input::sendKeyInput('c', true);
+	Input::sendKeyInput('d', true);
+	Input::sendKeyInput('e', true);
+	Input::sendKeyInput('a', true);
 	for (unsigned i = 0; i < b.hitObjects.size(); i++) {
-		a.moveMouseInstant(vec2<unsigned>{b.hitObjects.at(i)->getX(), b.hitObjects.at(i)->getY()});
-		Sleep(20);
+		Input::moveMouseInstant(vec2<unsigned>{b.hitObjects.at(i)->getX(), b.hitObjects.at(i)->getY()});
+		Sleep(10);
 	}
 	std::cin.get();
 	return 0;

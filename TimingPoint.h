@@ -6,7 +6,7 @@
 class TimingPoint
 {
 private:
-	unsigned offset;
+	int offset;
 	double msPerBeat;
 	bool inherited;
 
@@ -16,7 +16,7 @@ private:
 	double velocity;
 	
 public:
-	TimingPoint(unsigned offset, double indivMSPB)
+	TimingPoint(int offset, double indivMSPB)
 		: offset(offset), msPerBeat(indivMSPB), inherited(indivMSPB < 0 ? true : false) {
 		// Inherited timing points need a reference
 		static double parentMsPerBeat;
@@ -53,7 +53,7 @@ public:
 	}
 
 	// For finding out which timing point is active at the time a HitObject is
-	static TimingPoint getActiveTimingPoint(unsigned offset, std::vector<TimingPoint> points) {
+	static TimingPoint getActiveTimingPoint(int offset, std::vector<TimingPoint> points) {
 		for (auto it = points.rbegin(); it != points.rend(); std::advance(it, 1)) {
 			if ((*it).offset <= offset)
 				return *it;

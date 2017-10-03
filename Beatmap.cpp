@@ -66,7 +66,7 @@ bool Beatmap::readSongFile() {
 			if (line.find(L"TimingPoints") != std::string::npos) {
 				while (std::getline(beatmapFile, line) && !line.empty()) {
 					std::vector<std::wstring> timingPointInfo = splitLine(line, ',');
-					unsigned offset = std::stoul(timingPointInfo.at(0));
+					int offset = std::stoul(timingPointInfo.at(0));
 					double msPerBeat = std::stod(timingPointInfo.at(1));
 
 					timingPoints.push_back(TimingPoint(offset, msPerBeat));
