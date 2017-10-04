@@ -39,10 +39,10 @@ bool Beatmap::readSongFile() {
 	while (std::getline(beatmapFile, line)) {
 		// Find metadata
 		if (!foundMetaData) {
-			if (line.find(L"TitleUnicode:") != std::string::npos) {
+			if (line.find(L"Title:") != std::string::npos) {
 				songTitle = getLineValue(line);
 			}
-			else if (line.find(L"ArtistUnicode:") != std::string::npos) {
+			else if (line.find(L"Artist:") != std::string::npos) {
 				songArtist = getLineValue(line);
 				foundMetaData = true;
 			}
@@ -127,7 +127,7 @@ void Beatmap::parseHitObject(std::wstring line) {
 		double pixelLength = std::stod(lineComponents.at(7));
 		unsigned repeat = std::stoul(lineComponents.at(6));
 
-		TimingPoint activeTimingPoint = TimingPoint::getActiveTimingPoint(startTime, timingPoints);
+		TimingPoint activeTimingPoint = getActiveTimingPoint(startTime, timingPoints);
 
 		// Calculation for roughly how long a slider will last by adding the number of repeats
 		// times the pixel length of the slider divided by the pixels per beat value to 
@@ -162,6 +162,18 @@ std::vector<std::wstring> Beatmap::splitLine(std::wstring line, const wchar_t & 
 	if (lineComponents.size() < 8)
 		lineComponents.push_back(line.substr(0));
 	return lineComponents;
+}
+
+TimingPoint Beatmap::getActiveTimingPoint(int offset, std::vector<TimingPoint> points) {
+	for (auto it = points.rbegin(); it != points.rend(); std::advance(it, 1)) {
+		if ((*it).getOffset() <= offset)
+			return *it;
+	}
+	return points.at(0);
+}
+
+unsigned Beatmap::getOverallDifficulty() const {
+	return overallDifficulty;
 }
 
 void Beatmap::printBeatmap() const {

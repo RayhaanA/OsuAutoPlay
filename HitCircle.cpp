@@ -14,6 +14,6 @@ void HitCircle::hit() {
 }
 
 void HitCircle::printInfo() const {
-	std::wcout << "(" << getX() << ", " << getY() << ", " << getStartTime()
+	std::wcout << "(" << getPosition() << ", " << getStartTime()
 		<< ", " << getEndTime() << ", " << getType() << ")";
 }

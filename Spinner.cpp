@@ -11,6 +11,6 @@ void Spinner::hit() {
 }
 
 void Spinner::printInfo() const {
-	std::wcout << "(" << getX() << ", " << getY() << ", " << getStartTime()
+	std::wcout << "(" << getPosition() << ", " << getStartTime()
 		<< ", " << getEndTime() << ", " << getType() << ")";
 }

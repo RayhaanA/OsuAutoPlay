@@ -36,7 +36,7 @@ public:
 
 	~TimingPoint() {}
 
-	unsigned getOffset() const {
+	int getOffset() const {
 		return offset;
 	}
 
@@ -50,15 +50,6 @@ public:
 
 	double getVelocity() const {
 		return velocity;
-	}
-
-	// For finding out which timing point is active at the time a HitObject is
-	static TimingPoint getActiveTimingPoint(int offset, std::vector<TimingPoint> points) {
-		for (auto it = points.rbegin(); it != points.rend(); std::advance(it, 1)) {
-			if ((*it).offset <= offset)
-				return *it;
-		}
-		return points.at(0);
 	}
 
 	friend std::wostream& operator<<(std::wostream& os, const TimingPoint & point) {

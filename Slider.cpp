@@ -16,7 +16,7 @@ void Slider::hit() {
 }
 
 void Slider::printInfo() const {
-	std::wcout << "(" << getX() << ", " << getY() << ", " << getStartTime()
+	std::wcout << "(" << getPosition() << ", " << getStartTime()
 		<< ", " << getEndTime() << ", " << getType() << ", " << sliderType << ")" << " # ";
 	for (const auto & i : controlPoints) {
 		std::wcout << i << " | ";

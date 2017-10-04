@@ -1,5 +1,5 @@
 #pragma once
-
+#include "vec2.h"
 // Hit object parent class
 // Class members and child member requirements derived from
 // .osu file format page from osu! wiki
@@ -9,15 +9,11 @@ class HitObject
 {
 public:
 	HitObject(unsigned x, unsigned y, unsigned startTime, unsigned endTime, unsigned type) 
-		: x(x), y(y), startTime(startTime), endTime(endTime), type(static_cast<types>(type)) {}
+		: position(x, y), startTime(startTime), endTime(endTime), type(static_cast<types>(type)) {}
 	~HitObject() {}
 
-	unsigned getX() const {
-		return x;
-	}
-
-	unsigned getY() const {
-		return y;
+	vec2<unsigned> getPosition() const {
+		return position;
 	}
 
 	unsigned getStartTime() const {
@@ -49,8 +45,7 @@ public:
 	virtual void printInfo() const = 0;
 
 private:
-	unsigned x;
-	unsigned y;
+	vec2<unsigned> position;
 	unsigned type;
 	unsigned startTime;
 	unsigned endTime;
