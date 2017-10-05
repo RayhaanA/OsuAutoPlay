@@ -6,7 +6,10 @@
 #include "Slider.h"
 #include "HitCircle.h"
 
-Beatmap::Beatmap(std::wstring filePath) : songFilePath(filePath) {}
+Beatmap::Beatmap(std::wstring filePath) : songFilePath(filePath) {
+	// Starting point reference
+	hitObjects.push_back(std::shared_ptr<HitCircle>(new HitCircle(0, 0, 0, 2, HitObject::types::EMPTY)));
+}
 
 
 Beatmap::~Beatmap() {
@@ -100,13 +103,12 @@ bool Beatmap::readSongFile() {
 
 void Beatmap::parseHitObject(std::wstring line) {
 	unsigned endTime;
-	unsigned type;
 
 	std::vector<std::wstring> lineComponents = splitLine(line, ',');
 	unsigned x = std::stoul(lineComponents.at(0));
 	unsigned y = std::stoul(lineComponents.at(1));
 	unsigned startTime = std::stoul(lineComponents.at(2));
-	type = std::stoi(lineComponents.at(3));
+	unsigned type = std::stoi(lineComponents.at(3));
 
 	// Extract  type by masking with the bits corresponding to the hit objects
 	// as defined by .osu file format. (bit 0 + bit 1 + bit 3 = 11 = 0x0B)
@@ -115,12 +117,11 @@ void Beatmap::parseHitObject(std::wstring line) {
 
 	if (type & HitObject::types::SPINNER) {
 		endTime = std::stoul(lineComponents.at(5));
-		// std::unique_ptr<Spinner>(new Spinner(x, y, startTime, endTime, type));
-		hitObjects.push_back(std::unique_ptr<Spinner>(new Spinner(x, y, startTime, endTime, type)));
+		hitObjects.push_back(std::shared_ptr<Spinner>(new Spinner(x, y, startTime, endTime, type)));
 	}
 	else if (type & HitObject::types::CIRCLE) {
-		endTime = startTime + 2; // Guess
-		hitObjects.push_back(std::unique_ptr<HitCircle>(new HitCircle(x, y, startTime, endTime, type)));
+		endTime = startTime + 2; // Need to register input 
+		hitObjects.push_back(std::shared_ptr<HitCircle>(new HitCircle(x, y, startTime, endTime, type)));
 	}
 	else if (type & HitObject::types::SLIDER) {
 		wchar_t sliderType = lineComponents.at(5)[0];
@@ -132,19 +133,17 @@ void Beatmap::parseHitObject(std::wstring line) {
 		// Calculation for roughly how long a slider will last by adding the number of repeats
 		// times the pixel length of the slider divided by the pixels per beat value to 
 		// the start time (100 * vel is the effective velocity for the timing point)
-		unsigned endTime = static_cast<unsigned>(std::ceil(startTime + repeat * pixelLength 
+		endTime = static_cast<unsigned>(std::ceil(startTime + repeat * pixelLength 
 											/ (100 * activeTimingPoint.getVelocity() * sliderMultiplier)));
 		std::vector<vec2<unsigned>> controlPoints;
 		std::vector<std::wstring> sControlPoints = splitLine(lineComponents.at(5), '|');
-		for (const auto & i : sControlPoints) {
-			if (i.length() == 1) // Skip slider type
-				continue;
-			unsigned pos = i.find(':');
-			vec2<unsigned> point = { std::stoul(i.substr(0, pos)), std::stoul(i.substr(pos + 1, i.length())) };
+		for (auto it = sControlPoints.begin() + 1, end = sControlPoints.end(); it != end; std::advance(it, 1)) {
+			unsigned pos = it->find(':');
+			vec2<unsigned> point = { std::stoul(it->substr(0, pos)), std::stoul(it->substr(pos + 1, it->length())) };
 			controlPoints.push_back(point);
 		}
 
-		hitObjects.push_back(std::unique_ptr<Slider>(new Slider(x, y, startTime, endTime, type, sliderType, controlPoints)));
+		hitObjects.push_back(std::shared_ptr<Slider>(new Slider(x, y, startTime, endTime, type, sliderType, controlPoints)));
 	}	
 }
 
@@ -165,7 +164,7 @@ std::vector<std::wstring> Beatmap::splitLine(std::wstring line, const wchar_t & 
 }
 
 TimingPoint Beatmap::getActiveTimingPoint(int offset, std::vector<TimingPoint> points) {
-	for (auto it = points.rbegin(); it != points.rend(); std::advance(it, 1)) {
+	for (auto it = points.rbegin(), end = points.rend(); it != end; std::advance(it, 1)) {
 		if ((*it).getOffset() <= offset)
 			return *it;
 	}

@@ -43,5 +43,5 @@ public:
 
 	std::vector<TimingPoint> timingPoints;
 	// Pointer of base type to avoid object slicing
-	std::vector<std::unique_ptr<HitObject>> hitObjects;
+	std::vector<std::shared_ptr<HitObject>> hitObjects;
 };

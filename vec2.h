@@ -21,8 +21,8 @@ public:
 	}
 	~vec2() {}
 
-	double magnitude() {
-		return std::sqrt(x * x + y * y);
+	unsigned magnitude() {
+		return (unsigned)(std::sqrt(x * x + y * y));
 	}
 
 
