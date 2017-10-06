@@ -9,8 +9,9 @@ public:
 	Spinner(unsigned x, unsigned y, unsigned startTime, unsigned endTime, unsigned type);
 	~Spinner();
 
-	void hit();
+	virtual void mouseMovement();
 
 	void printInfo() const;
+
 };
 

@@ -28,11 +28,7 @@ public:
 		return type;
 	}
 
-	// Method for how the HitObject will be handled 
-	// differs for all HitObject types
-	// This method is for performing mouse movement and
-	// clicking the object
-	virtual void hit() = 0;
+	virtual void mouseMovement() = 0;
 
 	// Different HitObject types defined by .osu file format
 	enum types {

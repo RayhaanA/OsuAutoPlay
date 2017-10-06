@@ -11,14 +11,17 @@ public:
 		 wchar_t sliderType, std::vector<vec2<unsigned>> controlPoints);
 	~Slider();
 
-	void hit();
+	virtual void mouseMovement();
 
 	void printInfo() const;
+
+	std::vector<vec2<unsigned>> sliderPoints;
 
 private:
 	wchar_t sliderType;
 	std::vector<vec2<unsigned>> controlPoints;
 	unsigned repeat;
 	double pixelLength;
+
 };
 

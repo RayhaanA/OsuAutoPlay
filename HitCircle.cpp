@@ -1,4 +1,5 @@
 #include "HitCircle.h"
+#include "Input.h"
 #include <iostream>
 
 HitCircle::HitCircle(unsigned x, unsigned y, unsigned startTime, unsigned endTime, unsigned type)
@@ -9,8 +10,8 @@ HitCircle::~HitCircle() {
 
 }
 
-void HitCircle::hit() {
-
+void HitCircle::mouseMovement() {
+	Input::moveMouseInstant(getPosition());
 }
 
 void HitCircle::printInfo() const {

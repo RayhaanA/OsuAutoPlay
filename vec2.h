@@ -82,6 +82,10 @@ public:
 		return os;
 	}
 
+	bool operator==(const vec2<T>& rhs) {
+		return x == rhs.x && y == rhs.y;
+	}
+
 	//Getters
 	T getX() const {
 		return x;

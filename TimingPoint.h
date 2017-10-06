@@ -16,41 +16,16 @@ private:
 	double velocity;
 	
 public:
-	TimingPoint(int offset, double indivMSPB)
-		: offset(offset), msPerBeat(indivMSPB), inherited(indivMSPB < 0 ? true : false) {
-		// Inherited timing points need a reference
-		static double parentMsPerBeat;
+	TimingPoint(int offset, double indivMSPB);
+	~TimingPoint();
 
-		if (inherited) {
-			// Inherited timing points affect how fast sliders will move
-			velocity = std::abs(100.0 / indivMSPB);
-			// Use last non-inherited mspb
-			msPerBeat = parentMsPerBeat;
-		}
-		// Regular timing point
-		else {
-			velocity = 1.0;
-			parentMsPerBeat = indivMSPB;
-		}
-	}
+	int getOffset() const;
 
-	~TimingPoint() {}
+	double getMsPerBeat() const;
 
-	int getOffset() const {
-		return offset;
-	}
+	bool getInherited() const;
 
-	double getMsPerBeat() const {
-		return msPerBeat;
-	}
-
-	bool getInherited() const {
-		return inherited;
-	}
-
-	double getVelocity() const {
-		return velocity;
-	}
+	double getVelocity() const;
 
 	friend std::wostream& operator<<(std::wostream& os, const TimingPoint & point) {
 		os << "(" << point.offset << ", " << point.msPerBeat << ", " << point.inherited

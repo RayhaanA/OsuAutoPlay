@@ -3,12 +3,23 @@
 
 #include "Beatmap.h"
 #include "TimingPoint.h"
-#include "Input.h"
 #include "MemoryUtilities.h"
 #include "Modes.h"
+#include <iostream>
 #include <thread>
 #include <chrono>
 #include <algorithm>
+
+const unsigned int X_SCREEN_RES = GetSystemMetrics(SM_CXSCREEN);
+const unsigned int Y_SCREEN_RES = GetSystemMetrics(SM_CYSCREEN);
+
+// Eventually read these two values from config file
+const unsigned int OSU_X_SCREEN_RES = 1152;
+const unsigned int OSU_Y_SCREEN_RES = 864;
+
+// Local osu! window coordinates range from 0-512 (x) and 0-384 (y)
+const double X_SCALE_FACTOR = OSU_X_SCREEN_RES / 512;
+const double Y_SCALE_FACTOR = OSU_Y_SCREEN_RES / 384;
 
 // Using wmain, wstrings, wstreams, etc. due to .osu file being in unicode format
 
@@ -17,13 +28,15 @@ int wmain() {
 	DWORD processID = MemoryUtilities::getOsuProcessID();
 	if (!processID) {
 		std::wcerr << L"Failed to get process ID" << std::endl;
-		return -1;
+		std::wcin.get();
+		return EXIT_FAILURE;
 	}
 
 	HANDLE osuProcess = OpenProcess(PROCESS_VM_READ, false, processID);
 	if (osuProcess == INVALID_HANDLE_VALUE) {
 		std::wcerr << L"Failed to get osu! process handle from ID" << std::endl;
-		return -1;
+		std::wcin.get();
+		return EXIT_FAILURE;
 	}
 
 	DWORD timeAddress = MemoryUtilities::findAndGetTimeAddress(osuProcess);
@@ -39,7 +52,6 @@ int wmain() {
 	// For latencies below 2.0ms seems to be fine as is (maybe need 7)
 	const unsigned TOLERANCE = std::floor((79 - 6 * std::min((b.getOverallDifficulty() * 1.4), 10.0) + 0.5)) * 0.66 + 0.33 + 7;
 
-
 	// Index for current object
 	size_t i = 0;
 	
@@ -47,7 +59,7 @@ int wmain() {
 	bool keyPressed = false;
 
 	// Holder for elapsed time 
-	unsigned elapsed;
+	unsigned elapsed = {};
 	MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
 
 	// Hardcoded wait (osu! plays the song in the menu while beatmap isn't active)
@@ -62,8 +74,9 @@ int wmain() {
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 
-	Modes::HitOnly(i, b, osuProcess, timeAddress, elapsed, TOLERANCE, keyPressed);
+	// Play mode
+	Modes::HitOnly(i, b, osuProcess, timeAddress, elapsed, TOLERANCE);
 
 	CloseHandle(osuProcess);
-	return 0;
+	return EXIT_SUCCESS;
 }

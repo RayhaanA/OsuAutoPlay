@@ -21,10 +21,10 @@ namespace MemoryUtilities {
 			return(false);
 		}
 
-		PROCESSENTRY32 entry; // Iterating through snapshot
+		PROCESSENTRY32 entry = {}; // Iterating through snapshot
 		entry.dwSize = sizeof(PROCESSENTRY32); 
 
-		DWORD osuProcessID;
+		DWORD osuProcessID = {};
 
 		if (Process32First(processList, &entry)) {
 			while (Process32Next(processList, &entry)) {
@@ -83,7 +83,7 @@ namespace MemoryUtilities {
 	DWORD findAndGetTimeAddress(HANDLE gameProcess) {
 
 		DWORD timeBaseAddress = findPattern(gameProcess, PBYTE(TIME_SIGNATURE)) + 7;
-		DWORD timeAddress;
+		DWORD timeAddress = {};
 
 		// Read the size of a DWORD (32-bit) into time address variable
 		if (!ReadProcessMemory(gameProcess, LPCVOID(timeBaseAddress), &timeAddress, sizeof(DWORD), nullptr)) {

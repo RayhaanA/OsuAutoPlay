@@ -6,8 +6,8 @@
 #include <Windows.h>
 
 namespace Modes {
-	void HitOnly(size_t i, Beatmap b, HANDLE osuProcess, DWORD timeAddress, unsigned elapsed, const unsigned TOLERANCE,
-		bool keyPressed) {
+	void HitOnly(size_t i, Beatmap b, HANDLE osuProcess, DWORD timeAddress, unsigned elapsed, const unsigned TOLERANCE) {
+		bool keyPressed = false;
 		while (i < b.hitObjects.size()) {
 			auto currentObject = b.hitObjects.at(i);
 			unsigned nextStartTime = currentObject->getStartTime();
@@ -15,12 +15,12 @@ namespace Modes {
 			MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
 
 			if (elapsed >= nextStartTime - TOLERANCE && !keyPressed) {
-				Input::sendKeyInput('a', true, elapsed);
+				Input::sendKeyInput('a', true);
 				keyPressed = true;
 			}
 
 			if (elapsed > currentObject->getEndTime() && keyPressed) {
-				Input::sendKeyInput('a', false, elapsed);
+				Input::sendKeyInput('a', false);
 				keyPressed = false;
 				i++;
 			}
@@ -28,9 +28,31 @@ namespace Modes {
 		}
 	}
 
-	void FullAuto() {}
+	void FullAuto() {} // Mouse movement and click
 
-	void MouseMoveOnly() {}
+	void MouseMoveOnly(size_t i, Beatmap b, HANDLE osuProcess, DWORD timeAddress, unsigned elapsed, const unsigned TOLERANCE) {
+
+		// TODO: Slider and spinner movements
+
+		bool mouseOnObject = false;
+		while (i < b.hitObjects.size()) {
+			auto currentObject = b.hitObjects.at(i);
+			unsigned nextStartTime = currentObject->getStartTime();
+
+			MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
+
+			if (elapsed >= nextStartTime - TOLERANCE && !mouseOnObject) {
+				currentObject->mouseMovement();
+				mouseOnObject = true;
+			}
+
+			if (elapsed > currentObject->getEndTime() && mouseOnObject) {
+				mouseOnObject = false;
+				i++;
+			}
+			std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		}
+	}
 
 	void RelaxMode() {} // Like hit-only but is lenient towards manual mouse aiming
 }
