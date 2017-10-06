@@ -4,14 +4,13 @@
 
 namespace Input {
 
-	void sendKeyInput(char key, bool pressed, size_t i) {
+	void sendKeyInput(char key, bool pressed, unsigned time) {
 		INPUT keyboardInput = {0};
 		keyboardInput.type = INPUT_KEYBOARD;
 		keyboardInput.ki.wVk = VkKeyScanEx(key, GetKeyboardLayout(0)); // Map char to keycode
 		keyboardInput.ki.dwFlags = pressed ? 0 : KEYEVENTF_KEYUP;
 		keyboardInput.ki.time = 0;
 		SendInput(1, &keyboardInput, sizeof(keyboardInput));
-		if (pressed) std::wcout << "Pressed key for hit object: " << i << std::endl;
 	}
 
 	// TODO: Convert osu! pixel to screen pixel accordingly

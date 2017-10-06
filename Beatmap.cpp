@@ -6,10 +6,7 @@
 #include "Slider.h"
 #include "HitCircle.h"
 
-Beatmap::Beatmap(std::wstring filePath) : songFilePath(filePath) {
-	// Starting point reference
-	hitObjects.push_back(std::shared_ptr<HitCircle>(new HitCircle(0, 0, 0, 2, HitObject::types::EMPTY)));
-}
+Beatmap::Beatmap(std::wstring filePath) : songFilePath(filePath) {}
 
 
 Beatmap::~Beatmap() {
@@ -132,9 +129,11 @@ void Beatmap::parseHitObject(std::wstring line) {
 
 		// Calculation for roughly how long a slider will last by adding the number of repeats
 		// times the pixel length of the slider divided by the pixels per beat value to 
-		// the start time (100 * vel is the effective velocity for the timing point)
-		endTime = static_cast<unsigned>(std::ceil(startTime + repeat * pixelLength 
-											/ (100 * activeTimingPoint.getVelocity() * sliderMultiplier)));
+		// the start time (100 * vel is the effective velocity for the timing point), to get the number
+		// of beats it lasts for, and then multiplying by the msPerBeat of the timing point to get the length
+		endTime = static_cast<unsigned>(startTime + (((repeat * pixelLength ) / 
+													(100 * activeTimingPoint.getVelocity() * sliderMultiplier)) *
+													activeTimingPoint.getMsPerBeat()));
 		std::vector<vec2<unsigned>> controlPoints;
 		std::vector<std::wstring> sControlPoints = splitLine(lineComponents.at(5), '|');
 		for (auto it = sControlPoints.begin() + 1, end = sControlPoints.end(); it != end; std::advance(it, 1)) {

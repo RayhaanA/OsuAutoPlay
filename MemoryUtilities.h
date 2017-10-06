@@ -39,6 +39,7 @@ namespace MemoryUtilities {
 		}
 
 		CloseHandle(processList);
+		std::wprintf(L"osu! process ID found at: %d\n", osuProcessID);
 		return osuProcessID;
 	}
 
@@ -89,18 +90,16 @@ namespace MemoryUtilities {
 			std::wcerr << L"Couldn't read time address into memory!" << std::endl;
 			return false;
 		}
-
+		std::wprintf(L"osu! time address found at: %x\n", timeAddress);
 		return timeAddress;
 	}
 
 
-	unsigned getElapsedSongTime(HANDLE gameProcess, DWORD timeAddress) {
-		unsigned elapsedTime;
-		if (!ReadProcessMemory(gameProcess, LPCVOID(timeAddress), &elapsedTime, sizeof(unsigned), nullptr)) {
+	unsigned getElapsedSongTime(HANDLE gameProcess, DWORD timeAddress, unsigned & elapsed) {
+		if (!ReadProcessMemory(gameProcess, LPCVOID(timeAddress), &elapsed, sizeof(unsigned), nullptr)) {
 			std::wcerr << L"Couldn't retrieve elapsed time from the time address!" << std::endl;
 			return false;
 		}
-		return elapsedTime;
 	}
 }
 

@@ -5,6 +5,7 @@
 #include "TimingPoint.h"
 #include "Input.h"
 #include "MemoryUtilities.h"
+#include "Modes.h"
 #include <thread>
 #include <chrono>
 #include <algorithm>
@@ -12,61 +13,57 @@
 // Using wmain, wstrings, wstreams, etc. due to .osu file being in unicode format
 
 int wmain() {
-	Beatmap b(L"C:/Users/Co-op/Downloads/524026 The Koxx - A FOOL MOON NIGHT/The Koxx - A FOOL MOON NIGHT (Astar) [Friendofox's Galaxy].osu");
+	// Get time address for accessing its value
+	DWORD processID = MemoryUtilities::getOsuProcessID();
+	if (!processID) {
+		std::wcerr << L"Failed to get process ID" << std::endl;
+		return -1;
+	}
+
+	HANDLE osuProcess = OpenProcess(PROCESS_VM_READ, false, processID);
+	if (osuProcess == INVALID_HANDLE_VALUE) {
+		std::wcerr << L"Failed to get osu! process handle from ID" << std::endl;
+		return -1;
+	}
+
+	DWORD timeAddress = MemoryUtilities::findAndGetTimeAddress(osuProcess);
+
+	Beatmap b(L"C:/Program Files (x86)/osu!/Songs/524026 The Koxx - A FOOL MOON NIGHT/The Koxx - A FOOL MOON NIGHT (Astar) [emillia].osu");
 	if (!b.readSongFile()) {
 		std::wcerr << L"Couldn't parse beatmap file!" << std::endl;
 	}
-	//std::wcout << b.hitObjects.size();
+
 	// Use OD to get timing tolerance (79 - 6 * OD + 0.5) (Factors of (* 1.4) and (* 0.66 + 0.33) come from effects
 	// of hard rock and double time modifiers, respectively. Hard rock OD effect is capped at 10)
-	const unsigned TOLERANCE = std::floor((79 - 6 * std::min((b.getOverallDifficulty() * 1.4), 10.0) + 0.5)) * 0.66 + 0.33;
+	// Have to add 0-15ms onto calulcated value depending on in-game latency/game performance
+	// For latencies below 2.0ms seems to be fine as is (maybe need 7)
+	const unsigned TOLERANCE = std::floor((79 - 6 * std::min((b.getOverallDifficulty() * 1.4), 10.0) + 0.5)) * 0.66 + 0.33 + 7;
 
-	//b.printBeatmap();
+
+	// Index for current object
+	size_t i = 0;
 	
-	// Testing movement to hit objects
-	auto currentObject = b.hitObjects.front();
-
-	// Starting point
-	Input::moveMouseInstant(currentObject->getPosition());
-
-	size_t i = 1;
-	auto start = std::chrono::high_resolution_clock::now();
-	
+	// Key state
 	bool keyPressed = false;
 
-	unsigned timeUntilNextHit = 0;
+	// Holder for elapsed time 
 	unsigned elapsed;
-	unsigned nextStartTime;
-	vec2<unsigned> currentPosition = currentObject->getPosition();
+	MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
 
-	while (i < b.hitObjects.size()) {
-		currentObject = b.hitObjects.at(i);
-		elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count();
-		nextStartTime = currentObject->getStartTime();
-		timeUntilNextHit = nextStartTime - elapsed;
-
-		/*if (elapsed <= nextStartTime && !keyPressed) {
-			auto direction = currentObject->getPosition() - b.hitObjects.at(i-1)->getPosition();
-			auto distance = direction.magnitude();
-			auto pixelsToMove = distance / timeUntilNextHit;
-			Input::moveMouseInstant((currentPosition += vec2<unsigned>{ pixelsToMove, pixelsToMove }));
-		}*/
-
-		if (elapsed >= nextStartTime - TOLERANCE && !keyPressed) {
-			Input::moveMouseInstant(currentObject->getPosition());
-			currentPosition = currentObject->getPosition();
-			Input::sendKeyInput('.', true, i);
-			keyPressed = true;
-		}
-
-		if (elapsed > currentObject->getEndTime() && keyPressed) {
-			Input::sendKeyInput('.', false, i);
-			keyPressed = false;
-			i++;
-		}
-
+	// Hardcoded wait (osu! plays the song in the menu while beatmap isn't active)
+	while (elapsed != 0) {
+		MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
-	std::cin.get();
+
+	// Wait for starting
+	while (elapsed < b.hitObjects.at(i)->getStartTime()) {
+		MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	}
+
+	Modes::HitOnly(i, b, osuProcess, timeAddress, elapsed, TOLERANCE, keyPressed);
+
+	CloseHandle(osuProcess);
 	return 0;
 }
