@@ -103,11 +103,11 @@ void Beatmap::parseHitObject(std::wstring line) {
 
 	std::vector<std::wstring> lineComponents = splitLine(line, ',');
 	unsigned x = std::stoul(lineComponents.at(0));
-	x = ((x * X_SCALE_FACTOR) + (X_SCREEN_RES - OSU_X_SCREEN_RES) / 2) * (65536.f / X_SCREEN_RES);
+	//x = ((x * X_SCALE_FACTOR) + (X_SCREEN_RES - OSU_X_SCREEN_RES) / 2) * (65536.f / X_SCREEN_RES);
 	unsigned y = std::stoul(lineComponents.at(1));
-	std::wcout << x << L", ";
-	y = ((y * Y_SCALE_FACTOR) + (Y_SCREEN_RES - OSU_Y_SCREEN_RES) / 2) * (65536.f / Y_SCREEN_RES);
-	std::wcout << y << std::endl;
+	//std::wcout << x << L", ";
+	//y = ((y * Y_SCALE_FACTOR) + (Y_SCREEN_RES - OSU_Y_SCREEN_RES) / 2) * (65536.f / Y_SCREEN_RES);
+	//std::wcout << y << std::endl;
 	unsigned startTime = std::stoul(lineComponents.at(2));
 	unsigned type = std::stoi(lineComponents.at(3));
 
@@ -138,7 +138,7 @@ void Beatmap::parseHitObject(std::wstring line) {
 		endTime = static_cast<unsigned>(startTime + (((repeat * pixelLength ) / 
 													(100 * activeTimingPoint.getVelocity() * sliderMultiplier)) *
 													activeTimingPoint.getMsPerBeat()));
-		std::vector<vec2<unsigned>> controlPoints;
+		std::vector<vec2<unsigned>> controlPoints = { vec2<unsigned>{ x, y } };
 		std::vector<std::wstring> sControlPoints = splitLine(lineComponents.at(5), '|');
 		for (auto it = sControlPoints.begin() + 1, end = sControlPoints.end(); it != end; std::advance(it, 1)) {
 			unsigned pos = it->find(':');

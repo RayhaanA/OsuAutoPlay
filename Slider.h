@@ -15,13 +15,13 @@ public:
 
 	void printInfo() const;
 
-	std::vector<vec2<unsigned>> sliderPoints;
+	void setSliderPoints(std::vector<vec2<unsigned>> points);
 
 private:
 	wchar_t sliderType;
 	std::vector<vec2<unsigned>> controlPoints;
 	unsigned repeat;
 	double pixelLength;
-
+	std::vector<vec2<unsigned>> sliderPoints;
 };
 

@@ -25,3 +25,7 @@ void Slider::printInfo() const {
 		std::wcout << i << " | ";
 	}
 }
+
+void Slider::setSliderPoints(std::vector<vec2<unsigned>> points) {
+	sliderPoints = points;
+}
