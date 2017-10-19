@@ -2,7 +2,15 @@
 
 vec2<unsigned> Curve::linear(std::vector<vec2<unsigned>> controlPoints, double t)
 {
-	return vec2<unsigned>();
+	vec2<unsigned> x = controlPoints.at(0);
+	vec2<unsigned> y = controlPoints.at(1);
+
+	int xDir = static_cast<int>(y.getX()) - static_cast<int>(x.getX());
+	int yDir = static_cast<int>(y.getY()) - static_cast<int>(x.getY());
+
+	// unsigned magnitude = (y - x).magnitude();
+	
+	return vec2<unsigned>(x.getX() + static_cast<unsigned>(xDir * t), x.getY() + static_cast<unsigned>(yDir * t));
 }
 
 vec2<unsigned> Curve::bezier2(std::vector<vec2<unsigned>> controlPoints, double t)
@@ -42,7 +50,7 @@ vec2<unsigned> Curve::bezier3(std::vector<vec2<unsigned>> controlPoints, double 
 
 std::vector<vec2<unsigned>> Curve::bezierPath(std::vector<vec2<unsigned>> controlPoints)
 {	
-	// osu! sliders made up of more than 4 points are denoted by repeated sequential points
+	// osu! sliders made up of more than one line/curve are denoted by repeated sequential points
 	// where one curve ends and the next one starts. To coalesce curves simply calculate 
 	// all the slider points for each curve segment and add them to one array
 
@@ -61,6 +69,7 @@ std::vector<vec2<unsigned>> Curve::bezierPath(std::vector<vec2<unsigned>> contro
 
 std::vector<vec2<unsigned>> Curve::generateSliderPoints(std::vector<vec2<unsigned>> controlPoints, unsigned numPoints)
 {
-	if 
 	return std::vector<vec2<unsigned>>();
+	//if 
+	//return std::vector<vec2<unsigned>>();
 }

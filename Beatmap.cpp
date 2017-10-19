@@ -138,8 +138,10 @@ void Beatmap::parseHitObject(std::wstring line) {
 		endTime = static_cast<unsigned>(startTime + (((repeat * pixelLength ) / 
 													(100 * activeTimingPoint.getVelocity() * sliderMultiplier)) *
 													activeTimingPoint.getMsPerBeat()));
+
 		std::vector<vec2<unsigned>> controlPoints = { vec2<unsigned>{ x, y } };
 		std::vector<std::wstring> sControlPoints = splitLine(lineComponents.at(5), '|');
+
 		for (auto it = sControlPoints.begin() + 1, end = sControlPoints.end(); it != end; std::advance(it, 1)) {
 			unsigned pos = it->find(':');
 			vec2<unsigned> point = { std::stoul(it->substr(0, pos)), std::stoul(it->substr(pos + 1, it->length())) };
@@ -156,13 +158,16 @@ std::wstring Beatmap::getLineValue(std::wstring line) {
 
 std::vector<std::wstring> Beatmap::splitLine(std::wstring line, const wchar_t & delimiter) {
 	std::vector<std::wstring> lineComponents;
+
 	while (line.find(delimiter) != std::string::npos) {
 		unsigned pos = line.find(delimiter);
 		lineComponents.push_back(line.substr(0, pos));
 		line.erase(0, pos + 1);
 	}
+
 	if (lineComponents.size() < 8)
 		lineComponents.push_back(line.substr(0));
+
 	return lineComponents;
 }
 
@@ -171,6 +176,7 @@ TimingPoint Beatmap::getActiveTimingPoint(int offset, std::vector<TimingPoint> p
 		if ((*it).getOffset() <= offset)
 			return *it;
 	}
+
 	return points.at(0);
 }
 

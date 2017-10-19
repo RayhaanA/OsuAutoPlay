@@ -22,7 +22,7 @@ public:
 	~vec2() {}
 
 	unsigned magnitude() {
-		return (unsigned)(std::sqrt(x * x + y * y));
+		return static_cast<unsigned>(std::sqrt(x * x + y * y));
 	}
 
 

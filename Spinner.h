@@ -9,7 +9,7 @@ public:
 	Spinner(unsigned x, unsigned y, unsigned startTime, unsigned endTime, unsigned type);
 	~Spinner();
 
-	virtual void mouseMovement();
+	virtual void mouseMovement(DWORD timeAddress);
 
 	void printInfo() const;
 

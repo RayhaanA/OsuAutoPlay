@@ -10,7 +10,7 @@ HitCircle::~HitCircle() {
 
 }
 
-void HitCircle::mouseMovement() {
+void HitCircle::mouseMovement(DWORD timeAddress) {
 	Input::moveMouseInstant(getPosition());
 }
 

@@ -14,7 +14,7 @@ Slider::~Slider() {
 
 }
 
-void Slider::mouseMovement() {
+void Slider::mouseMovement(DWORD timeAddress) {
 	Input::moveMouseInstant(this->getPosition());
 }
 

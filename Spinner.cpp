@@ -7,7 +7,7 @@ Spinner::Spinner(unsigned x, unsigned y, unsigned startTime, unsigned endTime, u
 Spinner::~Spinner() {
 }
 
-void Spinner::mouseMovement() {
+void Spinner::mouseMovement(DWORD timeAddress) {
 	Input::moveMouseInstant(this->getPosition());
 }
 

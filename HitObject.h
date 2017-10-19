@@ -1,5 +1,6 @@
 #pragma once
 #include "vec2.h"
+#include <Windows.h>
 // Hit object parent class
 // Class members and child member requirements derived from
 // .osu file format page from osu! wiki
@@ -28,7 +29,7 @@ public:
 		return type;
 	}
 
-	virtual void mouseMovement() = 0;
+	virtual void mouseMovement(DWORD timeAddress) = 0;
 
 	// Different HitObject types defined by .osu file format
 	enum types {

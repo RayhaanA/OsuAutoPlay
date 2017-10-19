@@ -8,7 +8,7 @@ public:
 	HitCircle(unsigned x, unsigned y, unsigned startTime, unsigned endTime, unsigned type);
 	~HitCircle();
 
-	virtual void mouseMovement();
+	virtual void mouseMovement(DWORD timeAddress);
 
 	void printInfo() const;
 

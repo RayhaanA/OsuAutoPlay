@@ -11,7 +11,7 @@ public:
 		 wchar_t sliderType, std::vector<vec2<unsigned>> controlPoints);
 	~Slider();
 
-	virtual void mouseMovement();
+	virtual void mouseMovement(DWORD timeAddress);
 
 	void printInfo() const;
 
