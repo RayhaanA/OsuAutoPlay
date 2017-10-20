@@ -64,12 +64,12 @@ std::vector<vec2<unsigned>> Curve::bezierPath(std::vector<vec2<unsigned>> contro
 		}
 	}
 
-	//return 
+	return std::vector<vec2<unsigned>>();
 }
 
 std::vector<vec2<unsigned>> Curve::generateSliderPoints(std::vector<vec2<unsigned>> controlPoints, unsigned numPoints)
 {
 	return std::vector<vec2<unsigned>>();
 	//if 
-	//return std::vector<vec2<unsigned>>();
+	return std::vector<vec2<unsigned>>();
 }

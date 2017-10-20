@@ -52,12 +52,6 @@ int wmain() {
 	// For latencies below 2.0ms seems to be fine as is (maybe need 7)
 	const unsigned TOLERANCE = std::floor((79 - 6 * std::min((b.getOverallDifficulty() * 1.4), 10.0) + 0.5)) * 0.66 + 0.33 + 7;
 
-	// Index for current object
-	size_t i = 0;
-	
-	// Key state
-	bool keyPressed = false;
-
 	// Holder for elapsed time 
 	unsigned elapsed = {};
 	MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
@@ -69,13 +63,13 @@ int wmain() {
 	}
 
 	// Wait for starting
-	while (elapsed < b.hitObjects.at(i)->getStartTime()) {
+	while (elapsed < b.hitObjects.at(0)->getStartTime()) {
 		MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 
 	// Play mode
-	Modes::HitOnly(i, b, osuProcess, timeAddress, elapsed, TOLERANCE);
+	Modes::HitOnly(b, osuProcess, timeAddress, elapsed, TOLERANCE);
 
 	CloseHandle(osuProcess);
 	return EXIT_SUCCESS;

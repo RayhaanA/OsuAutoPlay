@@ -135,7 +135,7 @@ void Beatmap::parseHitObject(std::wstring line) {
 		// times the pixel length of the slider divided by the pixels per beat value to 
 		// the start time (100 * vel is the effective velocity for the timing point), to get the number
 		// of beats it lasts for, and then multiplying by the msPerBeat of the timing point to get the length
-		endTime = static_cast<unsigned>(startTime + (((repeat * pixelLength ) / 
+		endTime = static_cast<unsigned>(startTime + (((repeat * pixelLength ) / \
 													(100 * activeTimingPoint.getVelocity() * sliderMultiplier)) *
 													activeTimingPoint.getMsPerBeat()));
 

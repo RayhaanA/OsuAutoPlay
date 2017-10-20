@@ -6,8 +6,10 @@
 #include <Windows.h>
 
 namespace Modes {
-	void HitOnly(size_t i, Beatmap b, HANDLE osuProcess, DWORD timeAddress, unsigned elapsed, const unsigned TOLERANCE) {
+	void HitOnly(Beatmap b, HANDLE osuProcess, DWORD timeAddress, unsigned elapsed, const unsigned TOLERANCE) {
+		size_t i = 0;
 		bool keyPressed = false;
+
 		while (i < b.hitObjects.size()) {
 			auto currentObject = b.hitObjects.at(i);
 			unsigned nextStartTime = currentObject->getStartTime();
@@ -30,8 +32,8 @@ namespace Modes {
 
 	void FullAuto() {} // Mouse movement and click
 
-	void MouseMoveOnly(size_t i, Beatmap b, HANDLE osuProcess, DWORD timeAddress, unsigned elapsed, const unsigned TOLERANCE) {
-
+	void MouseMoveOnly(Beatmap b, HANDLE osuProcess, DWORD timeAddress, unsigned elapsed, const unsigned TOLERANCE) {
+		size_t i = 0;;
 		// TODO: Slider and spinner movements
 
 		bool mouseOnObject = false;
@@ -42,7 +44,7 @@ namespace Modes {
 			MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
 
 			if (elapsed >= nextStartTime - TOLERANCE && !mouseOnObject) {
-				currentObject->mouseMovement();
+				currentObject->mouseMovement(timeAddress);
 				mouseOnObject = true;
 			}
 
