@@ -9,7 +9,7 @@ void Input::sendKeyInput(char key, bool pressed) {
 	SendInput(1, &keyboardInput, sizeof(keyboardInput));
 }
 
-void Input::moveMouseInstant(vec2<unsigned> point) {
+void Input::moveMouseInstant(vec2<int> point) {
 	INPUT mouseInput = { 0 };
 	mouseInput.type = INPUT_MOUSE;
 	mouseInput.mi.dwFlags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE; // Absolute position for x/y

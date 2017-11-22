@@ -1,7 +1,7 @@
 #include "Spinner.h"
 #include "Input.h"
 
-Spinner::Spinner(unsigned x, unsigned y, unsigned startTime, unsigned endTime, unsigned type) 
+Spinner::Spinner(int x, int y, unsigned startTime, unsigned endTime, unsigned type)
 	: HitObject(x, y, startTime, endTime, type) {}
 
 Spinner::~Spinner() {

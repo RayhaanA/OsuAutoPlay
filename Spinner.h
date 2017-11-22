@@ -6,7 +6,7 @@ class Spinner :
 	public HitObject
 {
 public:
-	Spinner(unsigned x, unsigned y, unsigned startTime, unsigned endTime, unsigned type);
+	Spinner(int x, int y, unsigned startTime, unsigned endTime, unsigned type);
 	~Spinner();
 
 	virtual void mouseMovement(DWORD timeAddress);

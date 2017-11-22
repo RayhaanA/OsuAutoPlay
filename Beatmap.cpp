@@ -66,8 +66,8 @@ bool Beatmap::readSongFile() {
 			if (line.find(L"TimingPoints") != std::string::npos) {
 				while (std::getline(beatmapFile, line) && !line.empty()) {
 					std::vector<std::wstring> timingPointInfo = splitLine(line, ',');
-					int offset = std::stoul(timingPointInfo.at(0));
-					double msPerBeat = std::stod(timingPointInfo.at(1));
+					int offset = std::stoul(timingPointInfo[0]);
+					double msPerBeat = std::stod(timingPointInfo[1]);
 
 					timingPoints.push_back(TimingPoint(offset, msPerBeat));
 				}
@@ -102,14 +102,14 @@ void Beatmap::parseHitObject(std::wstring line) {
 	unsigned endTime;
 
 	std::vector<std::wstring> lineComponents = splitLine(line, ',');
-	unsigned x = std::stoul(lineComponents.at(0));
+	int x = std::stoul(lineComponents[0]);
 	//x = ((x * X_SCALE_FACTOR) + (X_SCREEN_RES - OSU_X_SCREEN_RES) / 2) * (65536.f / X_SCREEN_RES);
-	unsigned y = std::stoul(lineComponents.at(1));
+	int y = std::stoul(lineComponents[1]);
 	//std::wcout << x << L", ";
 	//y = ((y * Y_SCALE_FACTOR) + (Y_SCREEN_RES - OSU_Y_SCREEN_RES) / 2) * (65536.f / Y_SCREEN_RES);
 	//std::wcout << y << std::endl;
-	unsigned startTime = std::stoul(lineComponents.at(2));
-	unsigned type = std::stoi(lineComponents.at(3));
+	unsigned startTime = std::stoul(lineComponents[2]);
+	unsigned type = std::stoi(lineComponents[3]);
 
 	// Extract  type by masking with the bits corresponding to the hit objects
 	// as defined by .osu file format. (bit 0 + bit 1 + bit 3 = 11 = 0x0B)
@@ -117,7 +117,7 @@ void Beatmap::parseHitObject(std::wstring line) {
 	type = static_cast<HitObject::types>(type);
 
 	if (type & HitObject::types::SPINNER) {
-		endTime = std::stoul(lineComponents.at(5));
+		endTime = std::stoul(lineComponents[5]);
 		hitObjects.push_back(std::shared_ptr<Spinner>(new Spinner(x, y, startTime, endTime, type)));
 	}
 	else if (type & HitObject::types::CIRCLE) {
@@ -125,9 +125,9 @@ void Beatmap::parseHitObject(std::wstring line) {
 		hitObjects.push_back(std::shared_ptr<HitCircle>(new HitCircle(x, y, startTime, endTime, type)));
 	}
 	else if (type & HitObject::types::SLIDER) {
-		wchar_t sliderType = lineComponents.at(5)[0];
-		double pixelLength = std::stod(lineComponents.at(7));
-		unsigned repeat = std::stoul(lineComponents.at(6));
+		wchar_t sliderType = lineComponents[5][0];
+		double pixelLength = std::stod(lineComponents[7]);
+		unsigned repeat = std::stoul(lineComponents[6]);
 
 		TimingPoint activeTimingPoint = getActiveTimingPoint(startTime, timingPoints);
 
@@ -139,12 +139,12 @@ void Beatmap::parseHitObject(std::wstring line) {
 													(100 * activeTimingPoint.getVelocity() * sliderMultiplier)) *
 													activeTimingPoint.getMsPerBeat()));
 
-		std::vector<vec2<unsigned>> controlPoints = { vec2<unsigned>{ x, y } };
-		std::vector<std::wstring> sControlPoints = splitLine(lineComponents.at(5), '|');
+		std::vector<vec2<int>> controlPoints = { vec2<int>{ x, y } };
+		std::vector<std::wstring> sControlPoints = splitLine(lineComponents[5], '|');
 
 		for (auto it = sControlPoints.begin() + 1, end = sControlPoints.end(); it != end; std::advance(it, 1)) {
 			unsigned pos = it->find(':');
-			vec2<unsigned> point = { std::stoul(it->substr(0, pos)), std::stoul(it->substr(pos + 1, it->length())) };
+			vec2<int> point = { std::stoi(it->substr(0, pos)), std::stoi(it->substr(pos + 1, it->length())) };
 			controlPoints.push_back(point);
 		}
 
@@ -177,7 +177,7 @@ TimingPoint Beatmap::getActiveTimingPoint(int offset, std::vector<TimingPoint> p
 			return *it;
 	}
 
-	return points.at(0);
+	return points[0];
 }
 
 unsigned Beatmap::getOverallDifficulty() const {

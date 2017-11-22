@@ -11,7 +11,7 @@ namespace Modes {
 		bool keyPressed = false;
 
 		while (i < b.hitObjects.size()) {
-			auto currentObject = b.hitObjects.at(i);
+			auto currentObject = b.hitObjects[i];
 			unsigned nextStartTime = currentObject->getStartTime();
 
 			MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
@@ -38,7 +38,7 @@ namespace Modes {
 
 		bool mouseOnObject = false;
 		while (i < b.hitObjects.size()) {
-			auto currentObject = b.hitObjects.at(i);
+			auto currentObject = b.hitObjects[i];
 			unsigned nextStartTime = currentObject->getStartTime();
 
 			MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);

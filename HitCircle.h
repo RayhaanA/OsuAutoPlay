@@ -5,7 +5,7 @@ class HitCircle :
 	public HitObject
 {
 public:
-	HitCircle(unsigned x, unsigned y, unsigned startTime, unsigned endTime, unsigned type);
+	HitCircle(int x, int y, unsigned startTime, unsigned endTime, unsigned type);
 	~HitCircle();
 
 	virtual void mouseMovement(DWORD timeAddress);

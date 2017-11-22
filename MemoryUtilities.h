@@ -35,6 +35,7 @@ namespace MemoryUtilities {
 		}
 		else {
 			std::wcerr << L"Failed to find osu! process id!" << std::endl;
+			CloseHandle(processList);
 			return(false);
 		}
 

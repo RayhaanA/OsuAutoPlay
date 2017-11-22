@@ -9,7 +9,7 @@ namespace Input {
 	void sendKeyInput(char key, bool pressed);
 
 	// TODO: Convert osu! pixel to screen pixel accordingly
-	void moveMouseInstant(vec2<unsigned> point);
+	void moveMouseInstant(vec2<int> point);
 
 }
 

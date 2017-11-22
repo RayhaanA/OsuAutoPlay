@@ -7,21 +7,21 @@ class Slider :
 	public HitObject
 {
 public:
-	Slider(unsigned x, unsigned y, unsigned startTime, unsigned endTime, unsigned type,
-		 wchar_t sliderType, std::vector<vec2<unsigned>> controlPoints);
+	Slider(int x, int y, unsigned startTime, unsigned endTime, unsigned type,
+		 wchar_t sliderType, std::vector<vec2<int>> controlPoints);
 	~Slider();
 
 	virtual void mouseMovement(DWORD timeAddress);
 
 	void printInfo() const;
 
-	void setSliderPoints(std::vector<vec2<unsigned>> points);
+	void setSliderPoints(std::vector<vec2<int>> points);
 
 private:
 	wchar_t sliderType;
-	std::vector<vec2<unsigned>> controlPoints;
+	std::vector<vec2<int>> controlPoints;
 	unsigned repeat;
 	double pixelLength;
-	std::vector<vec2<unsigned>> sliderPoints;
+	std::vector<vec2<int>> sliderPoints;
 };
 
