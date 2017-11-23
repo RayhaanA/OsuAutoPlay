@@ -10,7 +10,7 @@ HitCircle::~HitCircle() {
 
 }
 
-void HitCircle::mouseMovement(DWORD timeAddress) {
+void HitCircle::mouseMovement(HANDLE osuProcess, DWORD timeAddress) {
 	Input::moveMouseInstant(getPosition());
 }
 

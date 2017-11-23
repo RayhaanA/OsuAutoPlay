@@ -191,14 +191,14 @@ void Beatmap::printBeatmap() const {
 	std::wcout << L"Overall Song Difficulty: " << overallDifficulty << std::endl;
 	std::wcout << L"Slider Multipler: " << sliderMultiplier << "\n" << std::endl;
 
-	std::wcout << L"[Timing Points]" << std::endl;
+	/*std::wcout << L"[Timing Points]" << std::endl;
 	for (const auto & i : timingPoints) {
 		std::wcout << i << std::endl;
 	}
-	std::wcout << std::endl;
+	std::wcout << std::endl;*/
 	std::wcout << L"[Hit Objects]" << std::endl;
 	for (const auto & i : hitObjects) {
-		i->printInfo();
+		if(i->getType() == HitObject::types::SLIDER) i->printInfo();
 		std::wcout << std::endl;
 	}
 

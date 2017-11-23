@@ -11,11 +11,9 @@ public:
 		 wchar_t sliderType, std::vector<vec2<int>> controlPoints);
 	~Slider();
 
-	virtual void mouseMovement(DWORD timeAddress);
+	virtual void mouseMovement(HANDLE osuProcess, DWORD timeAddress);
 
 	void printInfo() const;
-
-	void setSliderPoints(std::vector<vec2<int>> points);
 
 private:
 	wchar_t sliderType;

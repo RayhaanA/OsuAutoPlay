@@ -44,7 +44,7 @@ namespace Modes {
 			MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
 
 			if (elapsed >= nextStartTime - TOLERANCE && !mouseOnObject) {
-				currentObject->mouseMovement(timeAddress);
+				currentObject->mouseMovement(osuProcess, timeAddress);
 				mouseOnObject = true;
 			}
 

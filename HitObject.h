@@ -29,7 +29,7 @@ public:
 		return type;
 	}
 
-	virtual void mouseMovement(DWORD timeAddress) = 0;
+	virtual void mouseMovement(HANDLE osuProcess, DWORD timeAddress) = 0;
 
 	// Different HitObject types defined by .osu file format
 	enum types {

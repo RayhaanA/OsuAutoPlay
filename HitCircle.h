@@ -8,7 +8,7 @@ public:
 	HitCircle(int x, int y, unsigned startTime, unsigned endTime, unsigned type);
 	~HitCircle();
 
-	virtual void mouseMovement(DWORD timeAddress);
+	virtual void mouseMovement(HANDLE osuProcess, DWORD timeAddress);
 
 	void printInfo() const;
 

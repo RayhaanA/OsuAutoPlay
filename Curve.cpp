@@ -63,28 +63,29 @@ std::vector<vec2<int>> Curve::bezierPath(std::vector<vec2<int>> controlPoints)
 	std::vector<vec2<int>> sliderPoints = {};
 
 	// TODO: Maybe look at fixing repetition in this segment
-	for (unsigned start = 0, unsigned end = 1; end < controlPoints.size(); end++) {
+	for (unsigned start = 0, end = 1; end < controlPoints.size(); end++) {
+		// Make sure we're not at the end of the list and only one left
 		if (start == controlPoints.size() - 1 && end == controlPoints.size() - 1) {
 			sliderPoints.push_back(controlPoints[end]);
 		}
 		// Peek to see if start of next curve
-		else if (controlPoints[end] == controlPoints[end + 1]) {
+		else if ((end != controlPoints.size() - 1 && controlPoints[end] == controlPoints[end + 1]) || end == controlPoints.size() - 1) {
 			if (end - start < 2) { // 2 total points -> linear
 				auto points = std::vector<vec2<int>>{ controlPoints[start], controlPoints[end] };
-				for (unsigned i = 1; i <= NUM_SMOOTHING_ITERATIONS; i++) {
-					sliderPoints.push_back(linear(points, 0.1 * i));
+				for (unsigned i = 0; i <= NUM_SMOOTHING_ITERATIONS; i++) {
+					sliderPoints.push_back(linear(points, 1.0 / NUM_SMOOTHING_ITERATIONS * i));
 				}
 			}
 			else if (end - start < 3) { // 3 total points -> bezier2
 				auto points = std::vector<vec2<int>>{ controlPoints[start], controlPoints[start + 1], controlPoints[end] };
-				for (unsigned i = 1; i <= NUM_SMOOTHING_ITERATIONS; i++) {
-					sliderPoints.push_back(bezier2(points, 0.1 * i));
+				for (unsigned i = 0; i <= NUM_SMOOTHING_ITERATIONS; i++) {
+					sliderPoints.push_back(bezier2(points, 1.0 / NUM_SMOOTHING_ITERATIONS * i));
 				}
 			}
-			else { // 4 total points -> bezier 3
+			else { // 4 total points -> bezier3
 				auto points = std::vector<vec2<int>>{ controlPoints[start], controlPoints[start + 1], controlPoints[start+2], controlPoints[end] };
-				for (unsigned i = 1; i <= NUM_SMOOTHING_ITERATIONS; i++) {
-					sliderPoints.push_back(bezier3(points, 0.1 * i));
+				for (unsigned i = 0; i <= NUM_SMOOTHING_ITERATIONS; i++) {
+					sliderPoints.push_back(bezier3(points, 1.0 / NUM_SMOOTHING_ITERATIONS * i));
 				}
 			}
 			start = end + 1; // Update to the start of the new path component
@@ -96,6 +97,27 @@ std::vector<vec2<int>> Curve::bezierPath(std::vector<vec2<int>> controlPoints)
 
 std::vector<vec2<int>> Curve::generateSliderPoints(std::vector<vec2<int>> controlPoints, unsigned numPoints)
 {
-	return std::vector<vec2<int>>();
-	//if 
+	std::vector<vec2<int>> sliderPoints;
+	
+	switch (numPoints) {
+	case 2:
+		for (unsigned i = 0; i < NUM_SMOOTHING_ITERATIONS; i++) {
+			sliderPoints.push_back(linear(controlPoints, 1.0 / NUM_SMOOTHING_ITERATIONS * i));
+		}
+		break;
+	case 3:
+		for (unsigned i = 0; i < NUM_SMOOTHING_ITERATIONS; i++) {
+			sliderPoints.push_back(bezier2(controlPoints, 1.0 / NUM_SMOOTHING_ITERATIONS * i));
+		}
+		break;
+	case 4:
+		for (unsigned i = 0; i < NUM_SMOOTHING_ITERATIONS; i++) {
+			sliderPoints.push_back(bezier3(controlPoints, 1.0 / NUM_SMOOTHING_ITERATIONS * i));
+		}
+		break;
+	default:
+		sliderPoints = bezierPath(controlPoints);
+	}
+
+	return sliderPoints;
 }
