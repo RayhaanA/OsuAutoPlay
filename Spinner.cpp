@@ -17,7 +17,7 @@ void Spinner::mouseMovement(HANDLE osuProcess, DWORD timeAddress) {
 	
 	unsigned currentTime = MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, currentTime);
 	unsigned i = 0;
-	const float PI = 3.14159265;
+	const float PI = 3.14159265f;
 	float rad;
 	int radius = 10;
 

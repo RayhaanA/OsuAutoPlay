@@ -42,7 +42,7 @@ DWORD MemoryUtilities::findPattern(HANDLE process, unsigned char pattern[]) {
 								  // Byte array
 	unsigned char bucket[readSize];
 
-	for (size_t i = 0; i < (std::numeric_limits<int>::max)(); i += readSize - patternSize) {
+	for (unsigned i = 1; i < (std::numeric_limits<int>::max)(); i += readSize - patternSize) {
 		// Load 4KB chunk values into byte array
 		ReadProcessMemory(process, (LPCVOID)i, bucket, readSize, nullptr);
 

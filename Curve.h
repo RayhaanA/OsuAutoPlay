@@ -11,7 +11,7 @@ namespace Curve
 	vec2<int> bezier3(std::vector<vec2<int>> controlPoints, double t);
 
 	// Combines multiple bezier curves
-	std::vector<vec2<int>> bezierPath(std::vector<vec2<int>> controlPoints);
+	void bezierPath(std::vector<vec2<int>> &sliderPoints, std::vector<vec2<int>> controlPoints);
 
 	std::vector<vec2<int>> generateSliderPoints(std::vector<vec2<int>> controlPoints, unsigned numPoints);
 }
