@@ -148,7 +148,7 @@ void Beatmap::parseHitObject(std::wstring line) {
 			controlPoints.push_back(point);
 		}
 
-		hitObjects.push_back(std::shared_ptr<Slider>(new Slider(x, y, startTime, endTime, type, sliderType, controlPoints)));
+		hitObjects.push_back(std::shared_ptr<Slider>(new Slider(x, y, startTime, endTime, type, sliderType, controlPoints, repeat)));
 	}	
 }
 

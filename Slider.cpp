@@ -6,9 +6,9 @@
 #include <thread>
 
 Slider::Slider(int x, int y, unsigned startTime, unsigned endTime, unsigned type,
-	wchar_t sliderType, std::vector<vec2<int>> controlPoints)
+	wchar_t sliderType, std::vector<vec2<int>> controlPoints, unsigned repeat)
 	: HitObject(x, y, startTime, endTime, type),
-	sliderType(sliderType), controlPoints(controlPoints) {
+	sliderType(sliderType), controlPoints(controlPoints), repeat(repeat) {
 	// Calculation for curve points here
 	sliderPoints = Curve::generateSliderPoints(controlPoints, controlPoints.size());
 }
@@ -26,16 +26,29 @@ void Slider::mouseMovement(HANDLE osuProcess, DWORD timeAddress) {
 
 	unsigned elapsed = initialTime;
 	unsigned numPoints = sliderPoints.size();
-	unsigned msPerPoint = (endTime - initialTime + numPoints - 1) / numPoints;
+	unsigned msPerPoint = (endTime - initialTime + (numPoints * repeat) - 1) / (numPoints * repeat);
 
 	size_t i = 0;
+	unsigned repeatIteration = 1;
+	int direction = 1;
 
-	while (elapsed < endTime && i < numPoints) {
+	while (elapsed < endTime && repeat > 0) {
+		if (i == numPoints - 1 || (i == 0 && repeatIteration != 1)) {
+			repeat--;
+			repeatIteration++;
+			if (i == numPoints - 1)
+				direction = -1;
+			else 
+				direction = 1;
+		}
+
 		Input::moveMouseInstant(sliderPoints[i]);
-		i++;
+		i += direction;
+
 		std::this_thread::sleep_for(std::chrono::milliseconds(msPerPoint));
 	}
 }
+
 
 void Slider::printInfo() const {
 	std::wcout << "(" << getPosition() << ", " << getStartTime()

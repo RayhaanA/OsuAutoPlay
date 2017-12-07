@@ -15,7 +15,8 @@ void Spinner::mouseMovement(HANDLE osuProcess, DWORD timeAddress) {
 	vec2<int> start = this->getPosition();
 	Input::moveMouseInstant(start);
 	
-	unsigned currentTime = MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, currentTime);
+	unsigned currentTime;
+	MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, currentTime);
 	unsigned i = 0;
 	const float PI = 3.14159265f;
 	float rad;
@@ -23,7 +24,9 @@ void Spinner::mouseMovement(HANDLE osuProcess, DWORD timeAddress) {
 
 	// Moves mouse around unit circle based on i and the division factor 
 	while (currentTime < getEndTime()) {
-		if (i == 6) i = 0;
+		MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, currentTime);
+		if (i == 6) 
+			i = 0;
 		rad = PI * i / 3;
 		Input::moveMouseInstant(vec2<int>{ static_cast<int>(start.getX() + (radius * std::cosf(rad))), 
 										   static_cast<int>(start.getY() + (radius * std::sinf(rad))) });
