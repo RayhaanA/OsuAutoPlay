@@ -9,11 +9,11 @@
 class HitObject
 {
 public:
-	HitObject(int x, int y, unsigned startTime, unsigned endTime, unsigned type)
+	HitObject(double x, double y, unsigned startTime, unsigned endTime, unsigned type)
 		: position(x, y), startTime(startTime), endTime(endTime), type(static_cast<types>(type)) {}
 	~HitObject() {}
 
-	vec2<int> getPosition() const {
+	vec2<double> getPosition() const {
 		return position;
 	}
 
@@ -42,7 +42,7 @@ public:
 	virtual void printInfo() const = 0;
 
 private:
-	vec2<int> position;
+	vec2<double> position;
 	unsigned type;
 	unsigned startTime;
 	unsigned endTime;

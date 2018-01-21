@@ -5,8 +5,8 @@
 #include <chrono>
 #include <thread>
 
-Slider::Slider(int x, int y, unsigned startTime, unsigned endTime, unsigned type,
-	wchar_t sliderType, std::vector<vec2<int>> controlPoints, unsigned repeat)
+Slider::Slider(double x, double y, unsigned startTime, unsigned endTime, unsigned type,
+	wchar_t sliderType, std::vector<vec2<double>> controlPoints, unsigned repeat)
 	: HitObject(x, y, startTime, endTime, type),
 	sliderType(sliderType), controlPoints(controlPoints), repeat(repeat) {
 	// Calculation for curve points here

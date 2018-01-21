@@ -7,8 +7,8 @@ class Slider :
 	public HitObject
 {
 public:
-	Slider(int x, int y, unsigned startTime, unsigned endTime, unsigned type,
-		 wchar_t sliderType, std::vector<vec2<int>> controlPoints, unsigned repeat);
+	Slider(double x, double y, unsigned startTime, unsigned endTime, unsigned type,
+		 wchar_t sliderType, std::vector<vec2<double>> controlPoints, unsigned repeat);
 	~Slider();
 
 	virtual void mouseMovement(HANDLE osuProcess, DWORD timeAddress);
@@ -17,9 +17,9 @@ public:
 
 private:
 	wchar_t sliderType;
-	std::vector<vec2<int>> controlPoints;
+	std::vector<vec2<double>> controlPoints;
 	unsigned repeat;
 	double pixelLength;
-	std::vector<vec2<int>> sliderPoints;
+	std::vector<vec2<double>> sliderPoints;
 };
 

@@ -83,7 +83,7 @@ public:
 	}
 
 	bool operator==(const vec2<T>& rhs) {
-		return x == rhs.x && y == rhs.y;
+		return x - rhs.x < 0.001 && y - rhs.y < 0.001;
 	}
 
 	//Getters

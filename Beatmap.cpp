@@ -5,6 +5,22 @@
 #include "Spinner.h"
 #include "Slider.h"
 #include "HitCircle.h"
+#include <WinUser.h>
+
+const double X_SCREEN_RES = 1920.0;
+const double Y_SCREEN_RES = 1080.0;
+
+// Eventually read these two values from config file
+const double OSU_X_SCREEN_RES = 1920.0;
+const double OSU_Y_SCREEN_RES = 1080.0;
+
+// osu! hit object locations initially correspond to a 640x480 window and are scaled to
+// different resolutions
+const double X_SCALE_FACTOR = 3.0;
+const double Y_SCALE_FACTOR = 2.25;
+
+const double X_OFFSET = 192.0;
+const double Y_OFFSET = 108.0;
 
 Beatmap::Beatmap(std::wstring filePath) : songFilePath(filePath) {}
 
@@ -102,12 +118,13 @@ void Beatmap::parseHitObject(std::wstring line) {
 	unsigned endTime;
 
 	std::vector<std::wstring> lineComponents = splitLine(line, ',');
-	int x = std::stoul(lineComponents[0]);
-	//x = ((x * X_SCALE_FACTOR) + (X_SCREEN_RES - OSU_X_SCREEN_RES) / 2) * (65536.f / X_SCREEN_RES);
-	int y = std::stoul(lineComponents[1]);
-	//std::wcout << x << L", ";
-	//y = ((y * Y_SCALE_FACTOR) + (Y_SCREEN_RES - OSU_Y_SCREEN_RES) / 2) * (65536.f / Y_SCREEN_RES);
-	//std::wcout << y << std::endl;
+	double x = std::stod(lineComponents[0]);
+	double y = std::stod(lineComponents[1]);
+
+	// Convert to Windows coordinates
+	x = ((x * X_SCALE_FACTOR) + X_OFFSET);
+	y = ((y * Y_SCALE_FACTOR) + Y_OFFSET);
+
 	unsigned startTime = std::stoul(lineComponents[2]);
 	unsigned type = std::stoi(lineComponents[3]);
 
@@ -139,12 +156,15 @@ void Beatmap::parseHitObject(std::wstring line) {
 													(100 * activeTimingPoint.getVelocity() * sliderMultiplier)) *
 													activeTimingPoint.getMsPerBeat()));
 
-		std::vector<vec2<int>> controlPoints = { vec2<int>{ x, y } };
+		std::vector<vec2<double>> controlPoints = { vec2<double>{ x, y } };
 		std::vector<std::wstring> sControlPoints = splitLine(lineComponents[5], '|');
 
 		for (auto it = sControlPoints.begin() + 1, end = sControlPoints.end(); it != end; std::advance(it, 1)) {
 			unsigned pos = it->find(':');
-			vec2<int> point = { std::stoi(it->substr(0, pos)), std::stoi(it->substr(pos + 1, it->length())) };
+			// Convert control points to Windows coordinates
+			vec2<double> point = { ((std::stod(it->substr(0, pos)) * X_SCALE_FACTOR) + X_OFFSET), 
+									((std::stod(it->substr(pos + 1, it->length())) * Y_SCALE_FACTOR) + Y_OFFSET)
+								};
 			controlPoints.push_back(point);
 		}
 
@@ -191,14 +211,14 @@ void Beatmap::printBeatmap() const {
 	std::wcout << L"Overall Song Difficulty: " << overallDifficulty << std::endl;
 	std::wcout << L"Slider Multipler: " << sliderMultiplier << "\n" << std::endl;
 
-	/*std::wcout << L"[Timing Points]" << std::endl;
+	std::wcout << L"[Timing Points]" << std::endl;
 	for (const auto & i : timingPoints) {
 		std::wcout << i << std::endl;
 	}
-	std::wcout << std::endl;*/
+	std::wcout << std::endl;
 	std::wcout << L"[Hit Objects]" << std::endl;
 	for (const auto & i : hitObjects) {
-		if(i->getType() == HitObject::types::SLIDER) i->printInfo();
+		std::wcout << i->getPosition().getX() << ", " << i->getPosition().getY() ;
 		std::wcout << std::endl;
 	}
 

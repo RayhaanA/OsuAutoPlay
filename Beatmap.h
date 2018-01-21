@@ -5,13 +5,6 @@
 #include <string>
 #include <memory>
 
-extern const unsigned int OSU_X_SCREEN_RES;
-extern const unsigned int OSU_Y_SCREEN_RES;
-extern const unsigned int X_SCREEN_RES;
-extern const unsigned int Y_SCREEN_RES;
-extern const double X_SCALE_FACTOR;
-extern const double Y_SCALE_FACTOR;
-
 class Beatmap
 {
 private:

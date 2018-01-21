@@ -2,7 +2,7 @@
 #include "Input.h"
 #include <iostream>
 
-HitCircle::HitCircle(int x, int y, unsigned startTime, unsigned endTime, unsigned type)
+HitCircle::HitCircle(double x, double y, unsigned startTime, unsigned endTime, unsigned type)
   : HitObject(x, y, startTime, endTime, type) {}
 
 
