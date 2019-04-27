@@ -4,7 +4,7 @@
 #include <thread>
 #include <chrono>
 
-Spinner::Spinner(double x, double y, unsigned startTime, unsigned endTime, unsigned type)
+Spinner::Spinner(double x, double y, int startTime, int endTime, unsigned type)
 	: HitObject(x, y, startTime, endTime, type) {}
 
 Spinner::~Spinner() {
@@ -15,12 +15,12 @@ void Spinner::mouseMovement(HANDLE osuProcess, DWORD timeAddress) {
 	vec2<double> start = this->getPosition();
 	Input::moveMouseInstant(start);
 	
-	unsigned currentTime;
+	int currentTime;
 	MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, currentTime);
 	unsigned i = 0;
-	const double PI = 3.14159265f;
+	const double PI = 3.14159265;
 	double rad;
-	int radius = 10;
+	int radius = 100;
 
 	// Moves mouse around unit circle based on i and the division factor 
 	while (currentTime < getEndTime()) {

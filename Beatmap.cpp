@@ -19,7 +19,7 @@ const double OSU_Y_SCREEN_RES = 1080.0;
 const double X_SCALE_FACTOR = 3.0;
 const double Y_SCALE_FACTOR = 2.25;
 
-const double X_OFFSET = 192.0;
+const double X_OFFSET = 192.0; 
 const double Y_OFFSET = 108.0;
 
 Beatmap::Beatmap(std::wstring filePath) : songFilePath(filePath) {}
@@ -115,7 +115,7 @@ bool Beatmap::readSongFile() {
 }
 
 void Beatmap::parseHitObject(std::wstring line) {
-	unsigned endTime;
+	int endTime;
 
 	std::vector<std::wstring> lineComponents = splitLine(line, ',');
 	double x = std::stod(lineComponents[0]);
@@ -125,7 +125,7 @@ void Beatmap::parseHitObject(std::wstring line) {
 	x = ((x * X_SCALE_FACTOR) + X_OFFSET);
 	y = ((y * Y_SCALE_FACTOR) + Y_OFFSET);
 
-	unsigned startTime = std::stoul(lineComponents[2]);
+	int startTime = std::stoul(lineComponents[2]);
 	unsigned type = std::stoi(lineComponents[3]);
 
 	// Extract  type by masking with the bits corresponding to the hit objects

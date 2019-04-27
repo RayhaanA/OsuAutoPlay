@@ -6,7 +6,7 @@
 #include <Windows.h>
 
 namespace Modes {
-	void HitOnly(size_t i, Beatmap b, HANDLE osuProcess, DWORD timeAddress, unsigned elapsed, const unsigned TOLERANCE) {
+	void HitOnly(size_t i, Beatmap b, HANDLE osuProcess, DWORD timeAddress, int elapsed, const unsigned TOLERANCE) {
 		bool keyPressed = false;
 
 		while (i < b.hitObjects.size()) {
@@ -14,7 +14,7 @@ namespace Modes {
 			unsigned nextStartTime = currentObject->getStartTime();
 
 			MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
-
+            std::cout << elapsed << std::endl;
 			if (elapsed >= nextStartTime - TOLERANCE && !keyPressed) {
 				Input::sendKeyInput('a', true);
 				keyPressed = true;
@@ -31,14 +31,14 @@ namespace Modes {
 
 	void FullAuto() {} // Mouse movement and click
 
-	void MouseMoveOnly(size_t i, Beatmap b, HANDLE osuProcess, DWORD timeAddress, unsigned elapsed, const unsigned TOLERANCE) {
+	void MouseMoveOnly(size_t i, Beatmap b, HANDLE osuProcess, DWORD timeAddress, int elapsed, const unsigned TOLERANCE) {
 		// TODO: Slider and spinner movements
 
 		bool mouseOnObject = false;
 
 		while (i < b.hitObjects.size()) {
 			auto currentObject = b.hitObjects[i];
-			unsigned nextStartTime = currentObject->getStartTime();
+			int nextStartTime = currentObject->getStartTime();
 			std::cout << "Current start time : " << nextStartTime << " Current Time : " << elapsed <<  " " << i << "\n";
 			MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
 

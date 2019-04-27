@@ -9,7 +9,7 @@
 class HitObject
 {
 public:
-	HitObject(double x, double y, unsigned startTime, unsigned endTime, unsigned type)
+	HitObject(double x, double y, int startTime, int endTime, unsigned type)
 		: position(x, y), startTime(startTime), endTime(endTime), type(static_cast<types>(type)) {}
 	~HitObject() {}
 
@@ -17,11 +17,11 @@ public:
 		return position;
 	}
 
-	unsigned getStartTime() const {
+	int getStartTime() const {
 		return startTime;
 	}
 
-	unsigned getEndTime() const {
+	int getEndTime() const {
 		return endTime;
 	}
 

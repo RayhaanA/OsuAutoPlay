@@ -2,6 +2,18 @@
 #include <TlHelp32.h>
 #include <iostream>
 #include <limits>
+#include <string>
+#include <sstream>
+#include <iomanip>
+template< typename T >
+std::string int_to_hex(T i)
+{
+    std::stringstream stream;
+    stream << "0x"
+        << std::setfill('0') << std::setw(sizeof(T) * 2)
+        << std::hex << i;
+    return stream.str();
+}
 
 DWORD MemoryUtilities::getOsuProcessID() {
 	// Use TlHelp to get handle to process list
@@ -50,11 +62,13 @@ DWORD MemoryUtilities::findPattern(HANDLE process, unsigned char pattern[]) {
 			bool correctByte = true;
 			// Iterate through all combinations of bytes checking to see if patterns match
 			for (size_t k = 0; k < patternSize; k++) {
+                std::cout << int_to_hex(static_cast<uint16_t>(bucket[j + k])) << " ";
 				if (bucket[j + k] != pattern[k]) {
 					correctByte = false;
 					break;
 				}
 			}
+            std::cout << std::endl;
 			if (correctByte) {
 				return i + j; // Return bucket address value + offset within bucket as 
 							  // starting point for byte pattern
@@ -86,7 +100,7 @@ DWORD MemoryUtilities::findAndGetTimeAddress(HANDLE gameProcess) {
 }
 
 
-unsigned MemoryUtilities::getElapsedSongTime(HANDLE gameProcess, DWORD timeAddress, unsigned & elapsed) {
+unsigned MemoryUtilities::getElapsedSongTime(HANDLE gameProcess, DWORD timeAddress, int & elapsed) {
 	if (!ReadProcessMemory(gameProcess, LPCVOID(timeAddress), &elapsed, sizeof(unsigned), nullptr)) {
 		std::wcerr << L"Couldn't retrieve elapsed time from the time address!" << std::endl;
 		return false;

@@ -10,12 +10,12 @@ void Input::sendKeyInput(char key, bool pressed) {
 }
 
 void Input::moveMouseInstant(vec2<double> point) {
-	INPUT mouseInput;// = { 0 };
+	INPUT mouseInput = { 0 };
 	mouseInput.type = INPUT_MOUSE;
 	mouseInput.mi.dwFlags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE; // Absolute position for x/y
 																	 // Map to Windows coordinate system (defined as (0,0) to (65535,65535), (TL to BR))
-	mouseInput.mi.dx = point.getX() * (65535 / 1920);
-	mouseInput.mi.dy = point.getY() * (65535 / 1080);
+	mouseInput.mi.dx = point.getX() * (65535.f / 1920.f);
+	mouseInput.mi.dy = point.getY() * (65535.f / 1080.f);
 	mouseInput.mi.time = 0;
 	SendInput(1, &mouseInput, sizeof(mouseInput));
 }

@@ -7,7 +7,7 @@ class Slider :
 	public HitObject
 {
 public:
-	Slider(double x, double y, unsigned startTime, unsigned endTime, unsigned type,
+	Slider(double x, double y, int startTime, int endTime, unsigned type,
 		 wchar_t sliderType, std::vector<vec2<double>> controlPoints, unsigned repeat);
 	~Slider();
 

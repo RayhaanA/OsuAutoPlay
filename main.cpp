@@ -29,8 +29,8 @@ int wmain() {
 	}
 
 	DWORD timeAddress = MemoryUtilities::findAndGetTimeAddress(osuProcess);
-	
-	Beatmap b(L"C:/Program Files (x86)/osu!/Songs/564165 ke-ji feat Nanahira - Ange du Blanc Pur/ke-ji feat. Nanahira - Ange du Blanc Pur (BarkingMadDog) [ABSOLUTION].osu");
+
+	Beatmap b(L"C:/Program Files (x86)/osu!/Songs/580001 Tomofumi Tanizawa - Kimi ni Todoke/Tomofumi Tanizawa - Kimi ni Todoke (Kyuukai) [Easy].osu");
 	if (!b.readSongFile()) {
 		std::wcerr << L"Couldn't parse beatmap file!" << std::endl;
 	}
@@ -47,7 +47,7 @@ int wmain() {
 	size_t i = 0;
 
 	// Holder for elapsed time 
-	unsigned elapsed;
+	int elapsed;
 	MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
 
 	// Hardcoded wait (osu! plays the song in the menu while beatmap isn't active)
@@ -57,13 +57,18 @@ int wmain() {
 	}
 
 	// Wait for starting
-	//while (elapsed < b.hitObjects[i]->getStartTime()) {
-	//	MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
-	//	std::this_thread::sleep_for(std::chrono::milliseconds(1));
-	//}
+	while (elapsed < b.hitObjects[i]->getStartTime()) {
+		MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	}
+
+	/*while (elapsed != 0) {
+		MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+	}*/
 
 	// Play mode
-	Modes::MouseMoveOnly(i, b, osuProcess, timeAddress, elapsed, TOLERANCE);
+    Modes::HitOnly(i, b, osuProcess, timeAddress, elapsed, TOLERANCE);
 
 	CloseHandle(osuProcess);
 	return EXIT_SUCCESS;

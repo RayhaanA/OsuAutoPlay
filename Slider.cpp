@@ -5,7 +5,7 @@
 #include <chrono>
 #include <thread>
 
-Slider::Slider(double x, double y, unsigned startTime, unsigned endTime, unsigned type,
+Slider::Slider(double x, double y, int startTime, int endTime, unsigned type,
 	wchar_t sliderType, std::vector<vec2<double>> controlPoints, unsigned repeat)
 	: HitObject(x, y, startTime, endTime, type),
 	sliderType(sliderType), controlPoints(controlPoints), repeat(repeat) {
@@ -20,11 +20,11 @@ Slider::~Slider() {
 
 void Slider::mouseMovement(HANDLE osuProcess, DWORD timeAddress) {
 	// Reference to current time
-	unsigned initialTime;
-	unsigned endTime = getEndTime();
+	int initialTime;
+	int endTime = getEndTime();
 	MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, initialTime);
 
-	unsigned elapsed = initialTime;
+	int elapsed = initialTime;
 	unsigned numPoints = sliderPoints.size();
 	unsigned msPerPoint = (endTime - initialTime + (numPoints * repeat) - 1) / (numPoints * repeat);
 

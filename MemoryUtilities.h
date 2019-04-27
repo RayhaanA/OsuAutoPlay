@@ -23,6 +23,6 @@ namespace MemoryUtilities {
 	// A3, which was found to be the start of the address of the in-game time variable
 	DWORD findAndGetTimeAddress(HANDLE gameProcess);
 
-	unsigned getElapsedSongTime(HANDLE gameProcess, DWORD timeAddress, unsigned & elapsed);
+	unsigned getElapsedSongTime(HANDLE gameProcess, DWORD timeAddress, int & elapsed);
 }
 
