@@ -4,6 +4,7 @@
 #include "Input.h"
 #include <thread>
 #include <Windows.h>
+#include "vec2.h"
 
 namespace Modes {
 	void HitOnly(size_t i, Beatmap b, HANDLE osuProcess, DWORD timeAddress, int elapsed, const unsigned TOLERANCE) {
@@ -14,13 +15,13 @@ namespace Modes {
 			unsigned nextStartTime = currentObject->getStartTime();
 
 			MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
-            std::cout << elapsed << std::endl;
+
 			if (elapsed >= nextStartTime - TOLERANCE && !keyPressed) {
 				Input::sendKeyInput('a', true);
 				keyPressed = true;
 			}
 
-			if (elapsed > currentObject->getEndTime() && keyPressed) {
+			else if (elapsed > currentObject->getEndTime() && keyPressed) {
 				Input::sendKeyInput('a', false);
 				keyPressed = false;
 				i++;

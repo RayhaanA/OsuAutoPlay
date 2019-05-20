@@ -30,7 +30,8 @@ int wmain() {
 
 	DWORD timeAddress = MemoryUtilities::findAndGetTimeAddress(osuProcess);
 
-	Beatmap b(L"C:/Program Files (x86)/osu!/Songs/580001 Tomofumi Tanizawa - Kimi ni Todoke/Tomofumi Tanizawa - Kimi ni Todoke (Kyuukai) [Easy].osu");
+    Beatmap b(L"C:/Program Files (x86)/osu!/Songs/617809 ryo(supercell) feat Hatsune Miku - ODDS&ENDS (Speed Up Ver)/ryo(supercell) feat. Hatsune Miku - ODDS&ENDS (Speed Up Ver.) (elchxyrlia) [TEST COORDINATE MAP].osu");
+	//Beatmap b(L"C:/Program Files (x86)/osu!/Songs/12046 Hatsune Miku - haL1/Hatsune Miku - haL1 (AngelHoney) [No Slider!].osu");
 	if (!b.readSongFile()) {
 		std::wcerr << L"Couldn't parse beatmap file!" << std::endl;
 	}
@@ -41,7 +42,7 @@ int wmain() {
 	// of hard rock and double time modifiers, respectively. Hard rock OD effect is capped at 10)
 	// Have to add 0-15ms onto calulcated value depending on in-game latency/game performance
 	// For latencies below 2.0ms seems to be fine as is (maybe need 7)
-	const unsigned TOLERANCE = std::floor((79 - 6 * std::min((b.getOverallDifficulty() * 1.4), 10.0) + 0.5)) * 0.66 + 0.33 + 7;
+	const unsigned TOLERANCE = std::floor((79 - 6 * std::min((b.getOverallDifficulty() * 1.4), 10.0) + 0.5)) * 0.66 + 0.33 + 14;
 
 	// Current object index 
 	size_t i = 0;
@@ -62,13 +63,17 @@ int wmain() {
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 	}
 
-	/*while (elapsed != 0) {
-		MemoryUtilities::getElapsedSongTime(osuProcess, timeAddress, elapsed);
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
-	}*/
-
 	// Play mode
-    Modes::HitOnly(i, b, osuProcess, timeAddress, elapsed, TOLERANCE);
+    Modes::MouseMoveOnly(i, b, osuProcess, timeAddress, elapsed, TOLERANCE);
+
+   /* Input::moveMouseInstant({ 192.0 , 108.0 });
+    while (true) {
+        POINT p;
+        GetCursorPos(&p);
+        std::cout << p.x << " " << p.y << "\n";
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }*/
+    std::cin.get();
 
 	CloseHandle(osuProcess);
 	return EXIT_SUCCESS;

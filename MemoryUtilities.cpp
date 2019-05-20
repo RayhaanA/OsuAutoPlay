@@ -5,7 +5,8 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
-template< typename T >
+
+template<typename T>
 std::string int_to_hex(T i)
 {
     std::stringstream stream;
@@ -51,7 +52,7 @@ DWORD MemoryUtilities::findPattern(HANDLE process, unsigned char pattern[]) {
 	const size_t patternSize = sizeof(pattern);
 	const size_t readSize = 4096; // 4KB at a time (NTFS)
 
-								  // Byte array
+	// Byte array
 	unsigned char bucket[readSize];
 
 	for (unsigned i = 1; i < (std::numeric_limits<int>::max)(); i += readSize - patternSize) {
@@ -62,14 +63,13 @@ DWORD MemoryUtilities::findPattern(HANDLE process, unsigned char pattern[]) {
 			bool correctByte = true;
 			// Iterate through all combinations of bytes checking to see if patterns match
 			for (size_t k = 0; k < patternSize; k++) {
-                std::cout << int_to_hex(static_cast<uint16_t>(bucket[j + k])) << " ";
 				if (bucket[j + k] != pattern[k]) {
 					correctByte = false;
 					break;
 				}
 			}
-            std::cout << std::endl;
-			if (correctByte) {
+
+            if (correctByte) {
 				return i + j; // Return bucket address value + offset within bucket as 
 							  // starting point for byte pattern
 			}

@@ -82,6 +82,11 @@ public:
 		return os;
 	}
 
+    friend std::ostream& operator<<(std::ostream& os, const vec2<T>& vec) {
+        os << "(" << vec.x << ", " << vec.y << ")";
+        return os;
+    }
+
 	bool operator==(const vec2<T>& rhs) {
 		return x - rhs.x < 0.001 && y - rhs.y < 0.001;
 	}

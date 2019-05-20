@@ -16,11 +16,11 @@ const double OSU_Y_SCREEN_RES = 1080.0;
 
 // osu! hit object locations initially correspond to a 640x480 window and are scaled to
 // different resolutions
-const double X_SCALE_FACTOR = 3.0;
-const double Y_SCALE_FACTOR = 2.25;
+constexpr double X_SCALE_FACTOR = 1155 / 512;
+constexpr double Y_SCALE_FACTOR = 866 / 384;
 
-const double X_OFFSET = 192.0; 
-const double Y_OFFSET = 108.0;
+const double X_OFFSET = 384.0; 
+const double Y_OFFSET = 124.0;
 
 Beatmap::Beatmap(std::wstring filePath) : songFilePath(filePath) {}
 
@@ -122,8 +122,8 @@ void Beatmap::parseHitObject(std::wstring line) {
 	double y = std::stod(lineComponents[1]);
 
 	// Convert to Windows coordinates
-	x = ((x * X_SCALE_FACTOR) + X_OFFSET);
-	y = ((y * Y_SCALE_FACTOR) + Y_OFFSET);
+    x = x * X_SCALE_FACTOR + X_OFFSET;
+    y = y * Y_SCALE_FACTOR + Y_OFFSET;
 
 	int startTime = std::stoul(lineComponents[2]);
 	unsigned type = std::stoi(lineComponents[3]);

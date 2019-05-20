@@ -14,8 +14,8 @@ void Input::moveMouseInstant(vec2<double> point) {
 	mouseInput.type = INPUT_MOUSE;
 	mouseInput.mi.dwFlags = MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE; // Absolute position for x/y
 																	 // Map to Windows coordinate system (defined as (0,0) to (65535,65535), (TL to BR))
-	mouseInput.mi.dx = point.getX() * (65535.f / 1920.f);
-	mouseInput.mi.dy = point.getY() * (65535.f / 1080.f);
+	mouseInput.mi.dx = point.getX() * 65535.0f / GetSystemMetrics(SM_CXSCREEN) + 1;
+	mouseInput.mi.dy = point.getY() * 65535.0f / GetSystemMetrics(SM_CYSCREEN) + 1;
 	mouseInput.mi.time = 0;
 	SendInput(1, &mouseInput, sizeof(mouseInput));
 }
